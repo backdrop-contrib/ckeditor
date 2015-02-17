@@ -35,7 +35,23 @@
  */
 function ckeditor_help_delegate($path, $arg) {
   global $base_url;
+  $is_url = false;
+  $ckeditor_url = ckeditor_path('local');
+  if ($ckeditor_url == '<URL>') {
+    $ckeditor_url = ckeditor_path('url');
+    $is_url = true;
+  }
 
+  $do_not_touch_configjs = '';
+  if (!$is_url) {
+    $do_not_touch_configjs = '<p>' .
+          t('It is recommended to not edit the !ckeditor_config_file (!ckeditor_config_path) configuration file that is distributed with CKEditor, because you may overwrite it accidentally when you update the editor.', array(
+            '!ckeditor_config_path' => '<code>' . $ckeditor_url . '/config.js</code>',
+            '!ckeditor_config_file' => '<code>config.js</code>',
+              )
+          ) .
+          '</p>';
+  }
   switch ($path) {
     case 'admin/config/content/help#description':
       $output = t('Enables the use of CKEditor (a rich text WYSIWYG editor) instead of plain text fields.');
@@ -289,5 +305,5 @@ function ckeditor_filter_xss() {
     $text = $filters[$name]['process callback']($text, $format_filters[$name], $format, '', TRUE, $cache_id);
   }
 
-  echo $text;
+  echo $text; exit;
 }
