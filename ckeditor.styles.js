@@ -5,10 +5,10 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
 /*
  * This file is used/requested by the 'Styles' button.
- * The 'Styles' button is not enabled by default in DrupalFull and DrupalFiltered toolbars.
+ * The 'Styles' button is not enabled by default in BackdropFull and BackdropFiltered toolbars.
  */
 if(typeof(CKEDITOR) !== 'undefined') {
-    CKEDITOR.addStylesSet( 'drupal',
+    CKEDITOR.addStylesSet( 'backdrop',
     [
             /* Block Styles */
 

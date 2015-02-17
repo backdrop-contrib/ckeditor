@@ -21,7 +21,7 @@ CKEDITOR.editorConfig = function(config) {
   // Uncommenting this line doesn't mean the user will not be able to type PHP
   // code in the source. This kind of prevention must be done in the server
   // side
-  // (as does Drupal), so just leave this line as is.
+  // (as does Backdrop), so just leave this line as is.
   config.protectedSource.push(/<\?[\s\S]*?\?>/g); // PHP Code
 
   // [#1762328] Uncomment the line below to protect <code> tags in CKEditor (hide them in wysiwyg mode).
@@ -37,11 +37,11 @@ CKEDITOR.editorConfig = function(config) {
   /**
     * Sample extraCss code for the "marinelli" theme.
     */
-  if (Drupal.settings.ckeditor.theme == "marinelli") {
+  if (Backdrop.settings.ckeditor.theme == "marinelli") {
     config.extraCss += "body{background:#FFF;text-align:left;font-size:0.8em;}";
     config.extraCss += "#primary ol, #primary ul{margin:10px 0 10px 25px;}";
   }
-  if (Drupal.settings.ckeditor.theme == "newsflash") {
+  if (Backdrop.settings.ckeditor.theme == "newsflash") {
     config.extraCss = "body{min-width:400px}";
   }
 
@@ -55,7 +55,7 @@ CKEDITOR.editorConfig = function(config) {
   /**
     * Sample bodyClass and BodyId for the "marinelli" theme.
     */
-  if (Drupal.settings.ckeditor.theme == "marinelli") {
+  if (Backdrop.settings.ckeditor.theme == "marinelli") {
     config.bodyClass = 'singlepage';
     config.bodyId = 'primary';
   }
@@ -66,10 +66,10 @@ CKEDITOR.editorConfig = function(config) {
  */
 
 //Toolbar definition for basic buttons
-Drupal.settings.cke_toolbar_DrupalBasic = [ [ 'Format', 'Bold', 'Italic', '-', 'NumberedList','BulletedList', '-', 'Link', 'Unlink', 'Image' ] ];
+Backdrop.settings.cke_toolbar_BackdropBasic = [ [ 'Format', 'Bold', 'Italic', '-', 'NumberedList','BulletedList', '-', 'Link', 'Unlink', 'Image' ] ];
 
 //Toolbar definition for Advanced buttons
-Drupal.settings.cke_toolbar_DrupalAdvanced = [
+Backdrop.settings.cke_toolbar_BackdropAdvanced = [
   ['Source'],
   ['Cut','Copy','Paste','PasteText','PasteFromWord','-','SpellChecker', 'Scayt'],
   ['Undo','Redo','Find','Replace','-','SelectAll'],
@@ -84,7 +84,7 @@ Drupal.settings.cke_toolbar_DrupalAdvanced = [
 ];
 
 // Toolbar definition for all buttons
-Drupal.settings.cke_toolbar_DrupalFull = [
+Backdrop.settings.cke_toolbar_BackdropFull = [
   ['Source'],
   ['Cut','Copy','Paste','PasteText','PasteFromWord','-','SpellChecker', 'Scayt'],
   ['Undo','Redo','Find','Replace','-','SelectAll'],
@@ -98,5 +98,5 @@ Drupal.settings.cke_toolbar_DrupalFull = [
   ['Format','Font','FontSize'],
   ['TextColor','BGColor'],
   ['Maximize', 'ShowBlocks'],
-  ['DrupalBreak', 'DrupalPageBreak']
+  ['BackdropBreak', 'BackdropPageBreak']
 ];

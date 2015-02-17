@@ -21,9 +21,9 @@
  * == END LICENSE ==
  *
  * @file
- * CKEditor Module for Drupal 7.x
+ * CKEditor Module for Backdrop 1.x
  *
- * This module allows Drupal to replace textarea fields with CKEditor.
+ * This module allows Backdrop to replace textarea fields with CKEditor.
  *
  * CKEditor is an online rich text editor that can be embedded inside web pages.
  * It is a WYSIWYG (What You See Is What You Get) editor which means that the
@@ -37,7 +37,7 @@
  * The name of the simplified toolbar that should be forced.
  * Make sure that this toolbar is defined in ckeditor.config.js or fckconfig.js.
  */
-define('CKEDITOR_FORCE_SIMPLE_TOOLBAR_NAME', 'DrupalBasic');
+define('CKEDITOR_FORCE_SIMPLE_TOOLBAR_NAME', 'BackdropBasic');
 define('CKEDITOR_ENTERMODE_P', 1);
 define('CKEDITOR_ENTERMODE_BR', 2);
 define('CKEDITOR_ENTERMODE_DIV', 3);
@@ -97,7 +97,7 @@ function ckeditor_menu() {
   $items['admin/config/content/ckeditor/add'] = array(
     'title' => 'Add a new CKEditor profile',
     'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('ckeditor_admin_profile_form', 'add'),
     'file' => 'includes/ckeditor.admin.inc',
     'access arguments' => array('administer ckeditor'),
@@ -107,7 +107,7 @@ function ckeditor_menu() {
   $items['admin/config/content/ckeditor/clone/%ckeditor_profile'] = array(
     'title' => 'Clone the CKEditor profile',
     'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('ckeditor_admin_profile_clone_form', 'clone', 5),
     'file' => 'includes/ckeditor.admin.inc',
     'access arguments' => array('administer ckeditor'),
@@ -117,7 +117,7 @@ function ckeditor_menu() {
   $items['admin/config/content/ckeditor/edit/%ckeditor_profile'] = array(
     'title' => 'Edit the CKEditor profile',
     'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('ckeditor_admin_profile_form', 'edit', 5),
     'file' => 'includes/ckeditor.admin.inc',
     'access arguments' => array('administer ckeditor'),
@@ -127,7 +127,7 @@ function ckeditor_menu() {
   $items['admin/config/content/ckeditor/delete/%ckeditor_profile'] = array(
     'title' => 'Delete the CKEditor profile',
     'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('ckeditor_admin_profile_delete_form', 5),
     'file' => 'includes/ckeditor.admin.inc',
     'access arguments' => array('administer ckeditor'),
@@ -137,7 +137,7 @@ function ckeditor_menu() {
   $items['admin/config/content/ckeditor/addg'] = array(
     'title' => 'Add the CKEditor Global profile',
     'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('ckeditor_admin_global_profile_form', 'add'),
     'file' => 'includes/ckeditor.admin.inc',
     'access arguments' => array('administer ckeditor'),
@@ -147,7 +147,7 @@ function ckeditor_menu() {
   $items['admin/config/content/ckeditor/editg'] = array(
     'title' => 'Edit the CKEditor Global profile',
     'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('ckeditor_admin_global_profile_form', 'edit'),
     'file' => 'includes/ckeditor.admin.inc',
     'access arguments' => array('administer ckeditor'),
@@ -241,13 +241,13 @@ function ckeditor_get_version($main_version = FALSE) {
 }
 
 /**
- * Implements hook_page_build().
+ * Implements hook_preprocess_page().
  */
-function ckeditor_page_build(&$page) {
+function ckeditor_preprocess_page(&$page) {
   // Add our CSS file that adds common needed classes, such as align-left,
   // align-right, underline, indent, etc.
   $page['page_bottom']['ckeditor']['#attached']['css'] = array(
-    drupal_get_path('module', 'ckeditor') . '/css/ckeditor.css' => array(
+    backdrop_get_path('module', 'ckeditor') . '/css/ckeditor.css' => array(
       'every_page' => TRUE,
     ),
   );
@@ -288,7 +288,7 @@ function ckeditor_pre_render_text_format($element) {
   module_load_include('inc', 'ckeditor', 'includes/ckeditor.lib');
   if ($init === FALSE) {
     $input_formats = ckeditor_profiles_compile();
-    drupal_add_js(array('ckeditor' => array('input_formats' => $input_formats, 'plugins' => array())), 'setting');
+    backdrop_add_js(array('ckeditor' => array('input_formats' => $input_formats, 'plugins' => array())), 'setting');
     $init = TRUE;
   }
 
@@ -344,10 +344,10 @@ function ckeditor_profile_load($name = '', $clear = FALSE, $check_access = TRUE)
 }
 
 /**
- * Generate base path of the Drupal installation.
+ * Generate base path of the Backdrop installation.
  *
  * @return
- *   Path of the Drupal installation.
+ *   Path of the Backdrop installation.
  */
 function ckeditor_base_path($mode = 'relative') {
   if ($mode == 'local') {
@@ -366,19 +366,19 @@ function ckeditor_module_path($mode = 'relative') {
   switch ($mode) {
     default:
     case 'relative':
-      return ckeditor_base_path('relative') . '/' . drupal_get_path('module', 'ckeditor');
+      return ckeditor_base_path('relative') . '/' . backdrop_get_path('module', 'ckeditor');
     case 'local':
-      return ckeditor_base_path('local') . '/' . drupal_get_path('module', 'ckeditor');
+      return ckeditor_base_path('local') . '/' . backdrop_get_path('module', 'ckeditor');
     case 'url':
-      return drupal_get_path('module', 'ckeditor');
+      return backdrop_get_path('module', 'ckeditor');
   }
 }
 
 /**
- * Generate library path of the Drupal installation.
+ * Generate library path of the Backdrop installation.
  *
  * @return
- *   Path of library in the Drupal installation.
+ *   Path of library in the Backdrop installation.
  */
 function ckeditor_library_path($mode = 'relative') {
   $lib_path = 'sites/all/libraries';
@@ -386,7 +386,7 @@ function ckeditor_library_path($mode = 'relative') {
   if (function_exists('libraries_get_path')) {
     $path = libraries_get_path('ckeditor');
     if ($path !== FALSE) {
-      $lib_path = drupal_substr($path, 0, strlen($path) - 9);
+      $lib_path = backdrop_substr($path, 0, strlen($path) - 9);
     }
   }
   switch ($mode) {
@@ -590,7 +590,7 @@ function ckeditor_features_api() {
       'feature_source' => TRUE,
       'default_hook' => 'ckeditor_profile_defaults',
       'default_file' => FEATURES_DEFAULTS_INCLUDED,
-      'file' => drupal_get_path('module', 'ckeditor') . '/includes/ckeditor.features.inc',
+      'file' => backdrop_get_path('module', 'ckeditor') . '/includes/ckeditor.features.inc',
     )
   );
 }

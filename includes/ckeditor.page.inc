@@ -21,9 +21,9 @@
  * == END LICENSE ==
  *
  * @file
- * CKEditor Module for Drupal 7.x
+ * CKEditor Module for Backdrop 1.x
  *
- * This module allows Drupal to replace textarea fields with CKEditor.
+ * This module allows Backdrop to replace textarea fields with CKEditor.
  *
  * CKEditor is an online rich text editor that can be embedded inside web pages.
  * It is a WYSIWYG (What You See Is What You Get) editor which means that the
@@ -71,7 +71,7 @@ function ckeditor_help_delegate($path, $arg) {
     case 'admin/config/content/ckeditor':
       $output =
           '<div style="padding:10px;border:1px solid #BEBFB9;margin-bottom:10px;"><p>' .
-          t('The CKEditor module allows Drupal to replace textarea fields with CKEditor. CKEditor is an online rich text editor that can be embedded inside web pages. It is a !wysiwyg editor which means that the text edited in it looks as similar as possible to the results end users will see after the document gets published. It brings to the Web popular editing features found in desktop word processors such as Microsoft Word and OpenOffice.org Writer. CKEditor is truly lightweight and does not require any kind of installation on the client computer.', array(
+          t('The CKEditor module allows Backdrop to replace textarea fields with CKEditor. CKEditor is an online rich text editor that can be embedded inside web pages. It is a !wysiwyg editor which means that the text edited in it looks as similar as possible to the results end users will see after the document gets published. It brings to the Web popular editing features found in desktop word processors such as Microsoft Word and OpenOffice.org Writer. CKEditor is truly lightweight and does not require any kind of installation on the client computer.', array(
             '!wysiwyg' => '<acronym title="' . t('What You See Is What You Get') . '">' . t('WYSIWYG') . '</acronym>',
               )
           ) .
@@ -90,7 +90,7 @@ function ckeditor_help_delegate($path, $arg) {
       $output =
           '<h3>' . t('Introduction') . '</h3>' .
           '<p>' .
-          t('The CKEditor module allows Drupal to replace textarea fields with CKEditor. CKEditor is an online rich text editor that can be embedded inside web pages. It is a !wysiwyg editor which means that the text edited in it looks as similar as possible to the results end users will see after the document gets published. It brings to the Web popular editing features found in desktop word processors such as Microsoft Word and OpenOffice.org Writer. CKEditor is truly lightweight and does not require any kind of installation on the client computer.', array(
+          t('The CKEditor module allows Backdrop to replace textarea fields with CKEditor. CKEditor is an online rich text editor that can be embedded inside web pages. It is a !wysiwyg editor which means that the text edited in it looks as similar as possible to the results end users will see after the document gets published. It brings to the Web popular editing features found in desktop word processors such as Microsoft Word and OpenOffice.org Writer. CKEditor is truly lightweight and does not require any kind of installation on the client computer.', array(
             '!wysiwyg' => '<acronym title="' . t('What You See Is What You Get') . '">' . t('WYSIWYG') . '</acronym>',
               )
           ) .
@@ -123,7 +123,7 @@ function ckeditor_help_delegate($path, $arg) {
           '</code><br />' .
           t('<strong>Note:</strong> be careful when granting users access to create tags like %iframe.<br />If you are going to use CKEditor with the <strong>Filtered HTML</strong> input format, please read the "Setting up filters" section in the !readme file.', array(
             '%iframe' => '<iframe>',
-            '!readme' => '<code>' . l(t('README.txt'), $base_url . '/' . drupal_get_path('module', 'ckeditor') . '/README.txt', array('absolute' => TRUE)) . '</code>'
+            '!readme' => '<code>' . l(t('README.txt'), $base_url . '/' . backdrop_get_path('module', 'ckeditor') . '/README.txt', array('absolute' => TRUE)) . '</code>'
               )
           ) .
           '</li>' .
@@ -223,7 +223,7 @@ function ckeditor_filter_xss() {
   header('Content-Type: text/plain; charset=utf-8');
   $GLOBALS['devel_shutdown'] = FALSE;
 
-  if (!isset($_POST['text']) || !is_string($_POST['text']) || !isset($_POST['input_format']) || !is_string($_POST['input_format']) || !isset($_POST['token']) || !drupal_valid_token($_POST['token'], 'ckeditorAjaxCall', FALSE)) {
+  if (!isset($_POST['text']) || !is_string($_POST['text']) || !isset($_POST['input_format']) || !is_string($_POST['input_format']) || !isset($_POST['token']) || !backdrop_valid_token($_POST['token'], 'ckeditorAjaxCall', FALSE)) {
     exit;
   }
 

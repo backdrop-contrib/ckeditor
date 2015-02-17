@@ -21,7 +21,7 @@
  * == END LICENSE ==
  *
  * @file
- * CKEditor Module for Drupal 7.x
+ * CKEditor Module for Backdrop 1.x
  *
  * This file is required by the CKEeditor module if you want to enable CKFinder,
  * an advanced Ajax file browser.
@@ -41,35 +41,35 @@ function CheckAuthentication() {
 
   if (!isset($authenticated)) {
     if (!empty($_SERVER['SCRIPT_FILENAME'])) {
-      $drupal_path = dirname(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME']))));
-      if (!file_exists($drupal_path . '/includes/bootstrap.inc')) {
-        $drupal_path = dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+      $backdrop_path = dirname(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME']))));
+      if (!file_exists($backdrop_path . '/includes/bootstrap.inc')) {
+        $backdrop_path = dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
         $depth = 2;
         do {
-          $drupal_path = dirname($drupal_path);
+          $backdrop_path = dirname($backdrop_path);
           $depth++;
-        } while (!($bootstrap_file_found = file_exists($drupal_path . '/includes/bootstrap.inc')) && $depth < 10);
+        } while (!($bootstrap_file_found = file_exists($backdrop_path . '/includes/bootstrap.inc')) && $depth < 10);
       }
     }
 
     if (!isset($bootstrap_file_found) || !$bootstrap_file_found) {
-      $drupal_path = '../../../../..';
-      if (!file_exists($drupal_path . '/includes/bootstrap.inc')) {
-        $drupal_path = '../..';
+      $backdrop_path = '../../../../..';
+      if (!file_exists($backdrop_path . '/includes/bootstrap.inc')) {
+        $backdrop_path = '../..';
         do {
-          $drupal_path .= '/..';
-          $depth = substr_count($drupal_path, '..');
-        } while (!($bootstrap_file_found = file_exists($drupal_path . '/includes/bootstrap.inc')) && $depth < 10);
+          $backdrop_path .= '/..';
+          $depth = substr_count($backdrop_path, '..');
+        } while (!($bootstrap_file_found = file_exists($backdrop_path . '/includes/bootstrap.inc')) && $depth < 10);
       }
     }
     if (!isset($bootstrap_file_found) || $bootstrap_file_found) {
       $current_cwd = getcwd();
-      chdir($drupal_path);
-      if (!defined('DRUPAL_ROOT')) {
-        define('DRUPAL_ROOT', $drupal_path);
+      chdir($backdrop_path);
+      if (!defined('BACKDROP_ROOT')) {
+        define('BACKDROP_ROOT', $backdrop_path);
       }
-      require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-      drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
+      require_once BACKDROP_ROOT . '/includes/bootstrap.inc';
+      backdrop_bootstrap(BACKDROP_BOOTSTRAP_FULL);
       $authenticated = user_access('allow CKFinder file uploads');
       if (isset($_GET['id'], $_SESSION['ckeditor'][$_GET['id']]['UserFilesPath'], $_SESSION['ckeditor'][$_GET['id']]['UserFilesAbsolutePath'])) {
         $_SESSION['ckeditor']['UserFilesPath'] = $_SESSION['ckeditor'][$_GET['id']]['UserFilesPath'];
@@ -100,6 +100,6 @@ else {
   // Path to user files relative to the document root.
   $baseUrl = strtr(base_path(), array(
         '/modules/ckeditor/ckfinder/core/connector/php' => '',
-      )) . variable_get('file_private_path', conf_path() . '/files') . '/';
+      )) . config_get('system.core','file_private_path') . '/';
   $baseDir = resolveUrl($baseUrl);
 }

@@ -21,9 +21,9 @@
  * == END LICENSE ==
  *
  * @file
- * CKEditor Module for Drupal 7.x
+ * CKEditor Module for Backdrop 1.x
  *
- * This module allows Drupal to replace textarea fields with CKEditor.
+ * This module allows Backdrop to replace textarea fields with CKEditor.
  *
  * CKEditor is an online rich text editor that can be embedded inside web pages.
  * It is a WYSIWYG (What You See Is What You Get) editor which means that the
@@ -45,7 +45,7 @@ function hook_ckeditor_plugin() {
       // Description of the plugin - it would be displayed in the plugins management section of profile settings.
       'desc' => t('Plugin description'),
       // The full path to the CKEditor plugins directory, with the trailing slash.
-      'path' => drupal_get_path('module', 'my_module') . '/plugin_dir/',
+      'path' => backdrop_get_path('module', 'my_module') . '/plugin_dir/',
       'buttons' => array(
         'button_name' => array(
           'icon' => 'path to button icon',
@@ -91,7 +91,7 @@ function hook_ckeditor_security_filter_alter(&$security_filters) {
  */
 function hook_ckeditor_settings_alter(&$settings, $conf) {
   // Change the ckeditor config path.
-  $settings['customConfig'] = drupal_get_path('module', 'ckeditor') . '/ckeditor.config.js';
+  $settings['customConfig'] = backdrop_get_path('module', 'ckeditor') . '/ckeditor.config.js';
 }
 
 /**

@@ -17,7 +17,7 @@
         return spaceElement;
       };
 
-      if (Drupal.ckeditor_ver == 3) {
+      if (Backdrop.ckeditor_ver == 3) {
         ckeditorEventThemeSpace = 'themeSpace';
       }
 
