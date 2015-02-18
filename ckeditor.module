@@ -746,3 +746,14 @@ function ckeditor_field_extra_fields() {
   return $fields;
 }
 
+
+/**
+ * Implements hook_config_info().
+ */
+function ckeditor_config_info() {
+  $prefixes['ckeditor.settings'] = array(
+    'label' => t('CKEditor settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
