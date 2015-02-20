@@ -243,10 +243,10 @@ function ckeditor_get_version($main_version = FALSE) {
 /**
  * Implements hook_preprocess_page().
  */
-function ckeditor_preprocess_page(&$page) {
+function ckeditor_preprocess_page(&$variables) {
   // Add our CSS file that adds common needed classes, such as align-left,
   // align-right, underline, indent, etc.
-  $page['page_bottom']['ckeditor']['#attached']['css'] = array(
+  $variables['page_bottom']['ckeditor']['#attached']['css'] = array(
     backdrop_get_path('module', 'ckeditor') . '/css/ckeditor.css' => array(
       'every_page' => TRUE,
     ),
