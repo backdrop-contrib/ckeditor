@@ -13,7 +13,7 @@ OpenOffice.org Writer. CKEditor is truly lightweight and does not require any
 kind of installation on the client computer.
 
 <h2>Status</h2>
-This module is in the initial stages of porting to Backdrop
+This module has been ported to Backdrop and is ready for testing.
 
 <h2>Help & Documentation</h2>
 
@@ -52,3 +52,4 @@ Jorrit Schippers - Jorrit
 
 <h3>Port to Backdrop:</h3>
 Graham Oliver github.com/Graham-72
+with valuable advice from Wiktor Walc and Nate Haug
