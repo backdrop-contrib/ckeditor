@@ -12,21 +12,21 @@ CKEDITOR.dialog.add( 'mediaembedDialog', function( editor ) {
     return length;
   }
   return {
-    title : Drupal.t('Embed Media Dialog'),
+    title : Backdrop.t('Embed Media Dialog'),
     minWidth : 400,
     minHeight : 200,
     contents : [
     {
       id : 'mediaTab',
-      label : Drupal.t('Embed media code'),
-      title : Drupal.t('Embed media code'),
+      label : Backdrop.t('Embed media code'),
+      title : Backdrop.t('Embed media code'),
       elements :
       [
       {
         id : 'embed',
         type : 'textarea',
         rows : 9,
-        label : Drupal.t('Paste embed code here')
+        label : Backdrop.t('Paste embed code here')
       }
       ]
     }

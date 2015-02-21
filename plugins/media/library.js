@@ -5,16 +5,16 @@
  */
 
 (function ($) {
-  Drupal.media = Drupal.media || {};
+  Backdrop.media = Backdrop.media || {};
 
-  Drupal.settings.ckeditor.plugins['media'] = {
+  Backdrop.settings.ckeditor.plugins['media'] = {
 
     /**
        * Initializes the tag map.
        */
     initializeTagMap: function () {
-      if (typeof Drupal.settings.tagmap == 'undefined') {
-        Drupal.settings.tagmap = { };
+      if (typeof Backdrop.settings.tagmap == 'undefined') {
+        Backdrop.settings.tagmap = { };
       }
     },
     /**
@@ -22,8 +22,8 @@
        */
     invoke: function (data, settings, instanceId) {
       if (data.format == 'html') {
-        Drupal.media.popups.mediaBrowser(function (mediaFiles) {
-          Drupal.settings.ckeditor.plugins['media'].mediaBrowserOnSelect(mediaFiles, instanceId);
+        Backdrop.media.popups.mediaBrowser(function (mediaFiles) {
+          Backdrop.settings.ckeditor.plugins['media'].mediaBrowserOnSelect(mediaFiles, instanceId);
         }, settings['global']);
       }
     },
@@ -34,8 +34,8 @@
     mediaBrowserOnSelect: function (mediaFiles, instanceId) {
       var mediaFile = mediaFiles[0];
       var options = {};
-      Drupal.media.popups.mediaStyleSelector(mediaFile, function (formattedMedia) {
-        Drupal.settings.ckeditor.plugins['media'].insertMediaFile(mediaFile, formattedMedia.type, formattedMedia.html, formattedMedia.options, CKEDITOR.instances[instanceId]);
+      Backdrop.media.popups.mediaStyleSelector(mediaFile, function (formattedMedia) {
+        Backdrop.settings.ckeditor.plugins['media'].insertMediaFile(mediaFile, formattedMedia.type, formattedMedia.html, formattedMedia.options, CKEDITOR.instances[instanceId]);
       }, options);
 
       return;
@@ -55,9 +55,9 @@
 
       var toInsert = this.outerHTML(imgElement);
       // Create an inline tag
-      var inlineTag = Drupal.settings.ckeditor.plugins['media'].createTag(imgElement);
+      var inlineTag = Backdrop.settings.ckeditor.plugins['media'].createTag(imgElement);
       // Add it to the tag map in case the user switches input formats
-      Drupal.settings.tagmap[inlineTag] = toInsert;
+      Backdrop.settings.tagmap[inlineTag] = toInsert;
       ckeditorInstance.insertHtml(toInsert);
     },
 
@@ -81,7 +81,7 @@
        *
        * Going forward, if we don't care about supporting other editors
        * we can use the fakeobjects plugin to ckeditor to provide cleaner
-       * transparency between what Drupal will output <div class="field..."><img></div>
+       * transparency between what Backdrop will output <div class="field..."><img></div>
        * instead of just <img>, for now though, we're going to remove all the stuff surrounding the images.
        *
        * @param String formattedMedia
@@ -110,7 +110,7 @@
     attach: function (content, settings, instanceId) {
       var matches = content.match(/\[\[.*?\]\]/g);
       this.initializeTagMap();
-      var tagmap = Drupal.settings.tagmap;
+      var tagmap = Backdrop.settings.tagmap;
       if (matches) {
         var inlineTag = "";
         for (i = 0; i < matches.length; i++) {
@@ -146,11 +146,11 @@
     detach: function (content, settings, instanceId) {
       var content = $('<div>' + content + '</div>');
       $('img.media-image',content).each(function (elem) {
-        var tag = Drupal.settings.ckeditor.plugins['media'].createTag($(this));
+        var tag = Backdrop.settings.ckeditor.plugins['media'].createTag($(this));
         $(this).replaceWith(tag);
         var newContent = content.html();
         var tagContent = $('<div></div>').append($(this)).html();
-        Drupal.settings.tagmap[tag] = tagContent;
+        Backdrop.settings.tagmap[tag] = tagContent;
       });
       return content.html();
     },
@@ -232,8 +232,8 @@
       }
 
       // Remove elements from attribs using the blacklist
-      for (var blackList in Drupal.settings.media.blacklist) {
-        delete mediaAttributes[Drupal.settings.media.blacklist[blackList]];
+      for (var blackList in Backdrop.settings.media.blacklist) {
+        delete mediaAttributes[Backdrop.settings.media.blacklist[blackList]];
       }
       tagContent = {
         "type": 'media',

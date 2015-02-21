@@ -3,24 +3,24 @@ Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
-  window.CKEDITOR_BASEPATH = Drupal.settings.ckeditor.editor_path;
+  window.CKEDITOR_BASEPATH = Backdrop.settings.ckeditor.editor_path;
 }
 (function ($) {
-  Drupal.ckeditor = (typeof(CKEDITOR) != 'undefined');
-  Drupal.ckeditor_ver = false;
+  Backdrop.ckeditor = (typeof(CKEDITOR) != 'undefined');
+  Backdrop.ckeditor_ver = false;
 
-  Drupal.ckeditorToggle = function(textarea_ids, TextTextarea, TextRTE){
+  Backdrop.ckeditorToggle = function(textarea_ids, TextTextarea, TextRTE){
     if (!CKEDITOR.env.isCompatible) {
       return;
     }
 
     for (i=0; i<textarea_ids.length; i++){
       if (typeof(CKEDITOR.instances) != 'undefined' && typeof(CKEDITOR.instances[textarea_ids[i]]) != 'undefined'){
-        Drupal.ckeditorOff(textarea_ids[i]);
+        Backdrop.ckeditorOff(textarea_ids[i]);
         $('#switch_' + textarea_ids[i]).text(TextRTE);
       }
       else {
-        Drupal.ckeditorOn(textarea_ids[i]);
+        Backdrop.ckeditorOn(textarea_ids[i]);
         $('#switch_' + textarea_ids[i]).text(TextTextarea);
       }
     }
@@ -31,8 +31,8 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
  *
  * @param string textarea_id
  */
-  Drupal.ckeditorInit = function(textarea_id) {
-    var ckeditor_obj = Drupal.settings.ckeditor;
+  Backdrop.ckeditorInit = function(textarea_id) {
+    var ckeditor_obj = Backdrop.settings.ckeditor;
     $("#" + textarea_id).next(".grippie").css("display", "none");
     $("#" + textarea_id).addClass("ckeditor-processed");
 
@@ -40,20 +40,20 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
     ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]].toolbar = eval(ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]].toolbar);
     textarea_settings = ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]];
 
-    var drupalTopToolbar = $('#toolbar, #admin-menu', Drupal.overlayChild ? window.parent.document : document);
+    var backdropTopToolbar = $('#toolbar, #admin-menu', Backdrop.overlayChild ? window.parent.document : document);
 
     textarea_settings['on'] =
     {
       configLoaded  : function(ev)
       {
-        Drupal.ckeditor_ver = CKEDITOR.version.split('.')[0];
-        if (Drupal.ckeditor_ver == 3) {
+        Backdrop.ckeditor_ver = CKEDITOR.version.split('.')[0];
+        if (Backdrop.ckeditor_ver == 3) {
           ev.editor.addCss(ev.editor.config.extraCss);
         }
         else {
           CKEDITOR.addCss(ev.editor.config.extraCss);
         }
-        // Let Drupal trigger formUpdated event [#1895278]
+        // Let Backdrop trigger formUpdated event [#1895278]
         ev.editor.on('change', function(ev) {
           $(ev.editor.element.$).trigger('change');
         });
@@ -88,10 +88,10 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
           body.addClass(ev.editor.config.bodyClass);
         if (ev.editor.config.bodyId)
           body.attr('id', ev.editor.config.bodyId);
-        if (typeof(Drupal.smileysAttach) != 'undefined' && typeof(ev.editor.dataProcessor.writer) != 'undefined')
+        if (typeof(Backdrop.smileysAttach) != 'undefined' && typeof(ev.editor.dataProcessor.writer) != 'undefined')
           ev.editor.dataProcessor.writer.indentationChars = '    ';
 
-        // Let Drupal trigger formUpdated event [#1895278]
+        // Let Backdrop trigger formUpdated event [#1895278]
         ((ev.editor.editable && ev.editor.editable()) || ev.editor.document.getBody()).on( 'keyup', function() {
           $(ev.editor.element.$).trigger('keyup');
         });
@@ -101,8 +101,8 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
       },
       focus : function(ev)
       {
-        Drupal.ckeditorInstance = ev.editor;
-        Drupal.ckeditorActiveId = ev.editor.name;
+        Backdrop.ckeditorInstance = ev.editor;
+        Backdrop.ckeditorActiveId = ev.editor.name;
       },
       afterCommandExec: function(ev)
       {
@@ -110,15 +110,15 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
           return;
         }
         if (ev.data.command.state == CKEDITOR.TRISTATE_ON) {
-          drupalTopToolbar.hide();
+          backdropTopToolbar.hide();
         } else {
-          drupalTopToolbar.show();
+          backdropTopToolbar.show();
         }
       }
     };
 
-    if (typeof Drupal.settings.ckeditor.scayt_language != 'undefined'){
-      textarea_settings['scayt_sLang'] = Drupal.settings.ckeditor.scayt_language;
+    if (typeof Backdrop.settings.ckeditor.scayt_language != 'undefined'){
+      textarea_settings['scayt_sLang'] = Backdrop.settings.ckeditor.scayt_language;
     }
 
     if (typeof textarea_settings['js_conf'] != 'undefined'){
@@ -132,54 +132,54 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
 
     if (CKEDITOR.loadFullCore) {
       CKEDITOR.on('loaded', function() {
-        textarea_settings = Drupal.ckeditorLoadPlugins(textarea_settings);
-        Drupal.ckeditorInstance = CKEDITOR.replace(textarea_id, textarea_settings);
+        textarea_settings = Backdrop.ckeditorLoadPlugins(textarea_settings);
+        Backdrop.ckeditorInstance = CKEDITOR.replace(textarea_id, textarea_settings);
       });
       CKEDITOR.loadFullCore();
     }
     else {
-      textarea_settings = Drupal.ckeditorLoadPlugins(textarea_settings);
-      Drupal.ckeditorInstance = CKEDITOR.replace(textarea_id, textarea_settings);
+      textarea_settings = Backdrop.ckeditorLoadPlugins(textarea_settings);
+      Backdrop.ckeditorInstance = CKEDITOR.replace(textarea_id, textarea_settings);
     }
   }
 
-  Drupal.ckeditorOn = function(textarea_id, run_filter) {
+  Backdrop.ckeditorOn = function(textarea_id, run_filter) {
 
     run_filter = typeof(run_filter) != 'undefined' ? run_filter : true;
 
     if (typeof(textarea_id) == 'undefined' || textarea_id.length == 0 || $("#" + textarea_id).length == 0) {
       return;
     }
-    if ((typeof(Drupal.settings.ckeditor.load_timeout) == 'undefined') && (typeof(CKEDITOR.instances[textarea_id]) != 'undefined')) {
+    if ((typeof(Backdrop.settings.ckeditor.load_timeout) == 'undefined') && (typeof(CKEDITOR.instances[textarea_id]) != 'undefined')) {
       return;
     }
-    if (typeof(Drupal.settings.ckeditor.elements[textarea_id]) == 'undefined') {
+    if (typeof(Backdrop.settings.ckeditor.elements[textarea_id]) == 'undefined') {
       return;
     }
-    var ckeditor_obj = Drupal.settings.ckeditor;
+    var ckeditor_obj = Backdrop.settings.ckeditor;
 
     if (!CKEDITOR.env.isCompatible) {
       return;
     }
 
-    if (run_filter && ($("#" + textarea_id).val().length > 0) && typeof(ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]]) != 'undefined' && ((ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]]['ss'] == 1 && typeof(Drupal.settings.ckeditor.autostart) != 'undefined' && typeof(Drupal.settings.ckeditor.autostart[textarea_id]) != 'undefined') || ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]]['ss'] == 2)) {
+    if (run_filter && ($("#" + textarea_id).val().length > 0) && typeof(ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]]) != 'undefined' && ((ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]]['ss'] == 1 && typeof(Backdrop.settings.ckeditor.autostart) != 'undefined' && typeof(Backdrop.settings.ckeditor.autostart[textarea_id]) != 'undefined') || ckeditor_obj.input_formats[ckeditor_obj.elements[textarea_id]]['ss'] == 2)) {
       $.ajax({
         type: 'POST',
-        url: Drupal.settings.ckeditor.xss_url,
+        url: Backdrop.settings.ckeditor.xss_url,
         async: false,
         data: {
           text: $('#' + textarea_id).val(),
           input_format: ckeditor_obj.textarea_default_format[textarea_id],
-          token: Drupal.settings.ckeditor.ajaxToken
+          token: Backdrop.settings.ckeditor.ajaxToken
         },
         success: function(text){
           $("#" + textarea_id).val(text);
-          Drupal.ckeditorInit(textarea_id);
+          Backdrop.ckeditorInit(textarea_id);
         }
       })
     }
     else {
-      Drupal.ckeditorInit(textarea_id);
+      Backdrop.ckeditorInit(textarea_id);
     }
   };
 
@@ -188,15 +188,15 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
  *
  * @param string textarea_id
  */
-  Drupal.ckeditorOff = function(textarea_id) {
+  Backdrop.ckeditorOff = function(textarea_id) {
     if (!CKEDITOR.instances || typeof(CKEDITOR.instances[textarea_id]) == 'undefined') {
       return;
     }
     if (!CKEDITOR.env.isCompatible) {
       return;
     }
-    if (Drupal.ckeditorInstance && Drupal.ckeditorInstance.name == textarea_id)
-      delete Drupal.ckeditorInstance;
+    if (Backdrop.ckeditorInstance && Backdrop.ckeditorInstance.name == textarea_id)
+      delete Backdrop.ckeditorInstance;
 
     $("#" + textarea_id).val(CKEDITOR.instances[textarea_id].getData());
     CKEDITOR.instances[textarea_id].destroy(true);
@@ -209,7 +209,7 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
 *
 * @param object textarea_settings
 */
-  Drupal.ckeditorLoadPlugins = function(textarea_settings) {
+  Backdrop.ckeditorLoadPlugins = function(textarea_settings) {
     if (typeof(textarea_settings.extraPlugins) == 'undefined') {
       textarea_settings.extraPlugins = '';
     }
@@ -227,7 +227,7 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
   /**
  * Returns true if CKEDITOR.version >= version
  */
-  Drupal.ckeditorCompareVersion = function (version){
+  Backdrop.ckeditorCompareVersion = function (version){
     var ckver = CKEDITOR.version;
     ckver = ckver.match(/(([\d]\.)+[\d]+)/i);
     version = version.match(/((\d+\.)+[\d]+)/i);
@@ -244,16 +244,16 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
     return true;
   };
 
-  Drupal.ckeditorInsertHtml = function(html) {
-    if (!Drupal.ckeditorInstance)
+  Backdrop.ckeditorInsertHtml = function(html) {
+    if (!Backdrop.ckeditorInstance)
       return false;
 
-    if (Drupal.ckeditorInstance.mode == 'wysiwyg') {
-      Drupal.ckeditorInstance.insertHtml(html);
+    if (Backdrop.ckeditorInstance.mode == 'wysiwyg') {
+      Backdrop.ckeditorInstance.insertHtml(html);
       return true;
     }
     else {
-      alert(Drupal.t('Content can only be inserted into CKEditor in the WYSIWYG mode.'));
+      alert(Backdrop.t('Content can only be inserted into CKEditor in the WYSIWYG mode.'));
       return false;
     }
   };
@@ -261,8 +261,8 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
   /**
  * Ajax support
  */
-  if (typeof(Drupal.Ajax) != 'undefined' && typeof(Drupal.Ajax.plugins) != 'undefined') {
-    Drupal.Ajax.plugins.CKEditor = function(hook, args) {
+  if (typeof(Backdrop.Ajax) != 'undefined' && typeof(Backdrop.Ajax.plugins) != 'undefined') {
+    Backdrop.Ajax.plugins.CKEditor = function(hook, args) {
       if (hook === 'submit' && typeof(CKEDITOR.instances) != 'undefined') {
         for (var i in CKEDITOR.instances)
           CKEDITOR.instances[i].updateElement();
@@ -272,46 +272,46 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
   }
 
   //Support for Panels [#679976]
-  Drupal.ckeditorSubmitAjaxForm = function () {
+  Backdrop.ckeditorSubmitAjaxForm = function () {
     if (typeof(CKEDITOR.instances) != 'undefined' && typeof(CKEDITOR.instances['edit-body']) != 'undefined') {
-      Drupal.ckeditorOff('edit-body');
+      Backdrop.ckeditorOff('edit-body');
     }
   };
 
   function attachCKEditor(context) {
     // make sure the textarea behavior is run first, to get a correctly sized grippie
-    if (Drupal.behaviors.textarea && Drupal.behaviors.textarea.attach) {
-      Drupal.behaviors.textarea.attach(context);
+    if (Backdrop.behaviors.textarea && Backdrop.behaviors.textarea.attach) {
+      Backdrop.behaviors.textarea.attach(context);
     }
 
     $(context).find("textarea.ckeditor-mod:not(.ckeditor-processed)").each(function () {
       var ta_id=$(this).attr("id");
       if (CKEDITOR.instances && typeof(CKEDITOR.instances[ta_id]) != 'undefined'){
-        Drupal.ckeditorOff(ta_id);
+        Backdrop.ckeditorOff(ta_id);
       }
 
-      if ((typeof(Drupal.settings.ckeditor.autostart) != 'undefined') && (typeof(Drupal.settings.ckeditor.autostart[ta_id]) != 'undefined')) {
-        Drupal.ckeditorOn(ta_id);
+      if ((typeof(Backdrop.settings.ckeditor.autostart) != 'undefined') && (typeof(Backdrop.settings.ckeditor.autostart[ta_id]) != 'undefined')) {
+        Backdrop.ckeditorOn(ta_id);
       }
 
-      if (typeof(Drupal.settings.ckeditor.input_formats[Drupal.settings.ckeditor.elements[ta_id]]) != 'undefined') {
+      if (typeof(Backdrop.settings.ckeditor.input_formats[Backdrop.settings.ckeditor.elements[ta_id]]) != 'undefined') {
         $('.ckeditor_links').show();
       }
 
       var sel_format = $("#" + ta_id.substr(0, ta_id.lastIndexOf("-")) + "-format--2");
       if (sel_format && sel_format.not('.ckeditor-processed')) {
         sel_format.addClass('ckeditor-processed').change(function() {
-          Drupal.settings.ckeditor.elements[ta_id] = $(this).val();
+          Backdrop.settings.ckeditor.elements[ta_id] = $(this).val();
           if (CKEDITOR.instances && typeof(CKEDITOR.instances[ta_id]) != 'undefined') {
             $('#'+ta_id).val(CKEDITOR.instances[ta_id].getData());
           }
-          Drupal.ckeditorOff(ta_id);
-          if (typeof(Drupal.settings.ckeditor.input_formats[$(this).val()]) != 'undefined'){
+          Backdrop.ckeditorOff(ta_id);
+          if (typeof(Backdrop.settings.ckeditor.input_formats[$(this).val()]) != 'undefined'){
             if ($('#'+ta_id).hasClass('ckeditor-processed')) {
-              Drupal.ckeditorOn(ta_id, false);
+              Backdrop.ckeditorOn(ta_id, false);
             }
             else {
-              Drupal.ckeditorOn(ta_id);
+              Backdrop.ckeditorOn(ta_id);
             }
             $('#switch_'+ta_id).show();
           }
@@ -324,20 +324,20 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
   }
 
   /**
- * Drupal behaviors
+ * Backdrop behaviors
  */
-  Drupal.behaviors.ckeditor = {
+  Backdrop.behaviors.ckeditor = {
     attach:
     function (context) {
       // If CKEDITOR is undefined and script is loaded from CDN, wait up to 15 seconds until it loads [#2244817]
-      if ((typeof(CKEDITOR) == 'undefined') && Drupal.settings.ckeditor.editor_path.match(/^(http(s)?:)?\/\//i)) {
-        if (typeof(Drupal.settings.ckeditor.loadAttempts) == 'undefined') {
-          Drupal.settings.ckeditor.loadAttempts = 50;
+      if ((typeof(CKEDITOR) == 'undefined') && Backdrop.settings.ckeditor.editor_path.match(/^(http(s)?:)?\/\//i)) {
+        if (typeof(Backdrop.settings.ckeditor.loadAttempts) == 'undefined') {
+          Backdrop.settings.ckeditor.loadAttempts = 50;
         }
-        if (Drupal.settings.ckeditor.loadAttempts > 0) {
-          Drupal.settings.ckeditor.loadAttempts--;
+        if (Backdrop.settings.ckeditor.loadAttempts > 0) {
+          Backdrop.settings.ckeditor.loadAttempts--;
           window.setTimeout(function() {
-            Drupal.behaviors.ckeditor.attach(context);
+            Backdrop.behaviors.ckeditor.attach(context);
           }, 300);
         }
         return;
@@ -354,7 +354,7 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
         if (CKEDITOR.instances[ta_id])
           $('#'+ta_id).val(CKEDITOR.instances[ta_id].getData());
         if(trigger != 'serialize') {
-          Drupal.ckeditorOff(ta_id);
+          Backdrop.ckeditorOff(ta_id);
           $(this).removeClass('ckeditor-processed');
         }
       });
@@ -363,7 +363,7 @@ if (typeof window.CKEDITOR_BASEPATH === 'undefined') {
 
   // Support CTools detach event.
   $(document).bind('CToolsDetachBehaviors', function(event, context) {
-    Drupal.behaviors.ckeditor.detach(context, {}, 'unload');
+    Backdrop.behaviors.ckeditor.detach(context, {}, 'unload');
   });
 })(jQuery);
 

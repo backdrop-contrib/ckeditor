@@ -21,9 +21,9 @@
  * == END LICENSE ==
  *
  * @file
- * CKEditor Module for Drupal 7.x
+ * CKEditor Module for Backdrop 1.x
  *
- * This module allows Drupal to replace textarea fields with CKEditor.
+ * This module allows Backdrop to replace textarea fields with CKEditor.
  *
  * CKEditor is an online rich text editor that can be embedded inside web pages.
  * It is a WYSIWYG (What You See Is What You Get) editor which means that the
@@ -45,23 +45,23 @@ function ckeditor_admin_main() {
 
   //check if CKEditor plugin is installed
   if ($editor_path != '<URL>' && !_ckeditor_requirements_isinstalled()) {
-    drupal_set_message(t(
+    backdrop_set_message(t(
             'Checking for !filename or !file.', array(
           '!filename' => '<code>' . $ckconfig_file . '</code>',
           '!file' => '<code>sites/all/libraries/ckeditor/ckeditor.js</code>'
             )
         ));
-    drupal_set_message(t(
+    backdrop_set_message(t(
             'The CKEditor component is not installed correctly. Please go to the !ckeditorlink in order to download the latest version. After that you must extract the files to the !ckeditorpath or !librarypath directory and make sure that the !ckeditorfile or !ckeditorlibrary file exists. Refer to the !readme file for more information.', array(
           '!ckeditorlink' => l(t('CKEditor homepage'), 'http://ckeditor.com/download'),
-          '!readme' => l(t('README.txt'), $base_url . '/' . drupal_get_path('module', 'ckeditor') . '/README.txt', array('absolute' => TRUE)),
+          '!readme' => l(t('README.txt'), $base_url . '/' . backdrop_get_path('module', 'ckeditor') . '/README.txt', array('absolute' => TRUE)),
           '!ckeditorpath' => '<code>sites/all/modules/ckeditor/ckeditor</code>',
           '!ckeditorfile' => '<code>sites/all/modules/ckeditor/ckeditor/ckeditor.js</code>',
           '!ckeditorlibrary' => '<code>sites/all/libraries/ckeditor/ckeditor.js</code>',
           '!librarypath' => '<code>sites/all/libraries/ckeditor</code>'
             )
         ), 'error');
-    drupal_set_message(t(
+    backdrop_set_message(t(
             'If you have CKEditor already installed, edit the <strong>!editg</strong> and update the CKEditor path.', array(
           '!editg' => l(t('CKEditor Global Profile'), 'admin/config/content/ckeditor/editg')
             )
@@ -71,9 +71,9 @@ function ckeditor_admin_main() {
   }
 
   if (module_exists('wysiwyg')) {
-    drupal_set_message(t(
+    backdrop_set_message(t(
             'The WYSIWYG module was detected. Using both modules at the same time may cause problems. It is recommended to turn the WYSIWYG module off (!wysiwygdisablelink).', array(
-          '!wysiwygdisablelink' => l(t('click here to disable'), 'ckeditor/disable/wysiwyg/' . drupal_get_token('ckeditorDisableWysiwyg'))
+          '!wysiwygdisablelink' => l(t('click here to disable'), 'ckeditor/disable/wysiwyg/' . backdrop_get_token('ckeditorDisableWysiwyg'))
             )
         ), 'warning');
   }
@@ -81,7 +81,7 @@ function ckeditor_admin_main() {
   //find profile other than Global
   $result = db_select('ckeditor_settings', 's')->fields('s', array('name'))->condition('name', 'CKEditor Global Profile', '<>')->range(0, 1)->execute()->fetchAssoc();
   if (!$result) {
-    drupal_set_message(t('No CKEditor profiles found. Right now nobody is able to use CKEditor. Create a new profile below.'), 'error');
+    backdrop_set_message(t('No CKEditor profiles found. Right now nobody is able to use CKEditor. Create a new profile below.'), 'error');
   }
 
   return ckeditor_profile_overview();
@@ -95,7 +95,7 @@ function ckeditor_profile_overview() {
   $skins = ckeditor_load_skin_options();
   $global_profile = ckeditor_profile_load('CKEditor Global Profile');
   if (isset($global_profile->settings['skin']) && !array_key_exists($global_profile->settings['skin'], $skins)) {
-    drupal_set_message(t('The <em>CKEditor Global Profile</em> profile is using %skin skin which cannot be found. Please <a href="@profile_settings">update your settings</a>.', array('%skin' => $global_profile->settings['skin'], '@profile_settings' => url('admin/config/content/ckeditor/editg'))), 'warning');
+    backdrop_set_message(t('The <em>CKEditor Global Profile</em> profile is using %skin skin which cannot be found. Please <a href="@profile_settings">update your settings</a>.', array('%skin' => $global_profile->settings['skin'], '@profile_settings' => url('admin/config/content/ckeditor/editg'))), 'warning');
   }
   $profiles = ckeditor_profile_load();
   if ($profiles) {
@@ -119,7 +119,7 @@ function ckeditor_profile_overview() {
               $disabled_plugins[$p->name][] = $plugin_name;
               $changed = TRUE;
             }
-          }
+          }//endof foreach
           if ($changed === TRUE) {
             db_update('ckeditor_settings')
                 ->fields(array(
@@ -127,8 +127,8 @@ function ckeditor_profile_overview() {
                 ))
                 ->condition('name', $p->name, '=')
                 ->execute();
-          }
-        }
+          }//endof if
+        }//end of if (isset
         $rows[] = array(
           array('data' => $p->name, 'valign' => 'top'),
           array('data' => implode("<br />\n", $p->input_formats)),
@@ -151,15 +151,15 @@ function ckeditor_profile_overview() {
         $msg .= "<br/>";
         $msg .= t("<b>Plugins</b>: %profile_plugins", array("%profile_plugins" => implode(', ', $profile_plugins)));
       }
-      drupal_set_message($msg, 'warning');
+      backdrop_set_message($msg, 'warning');
     }
-
+    
     $output .= '<h3>' . t('Profiles') . '</h3>';
     $output .= theme('table', array("header" => $header, "rows" => $rows));
     $output .= '<p>' . l(t('Create a new profile'), 'admin/config/content/ckeditor/add') . '</p>';
   }
   else {
-    drupal_set_message(t(
+    backdrop_set_message(t(
             'No profiles found. Click here to !create.', array(
           '!create' => l(t('create a new profile'), 'admin/config/content/ckeditor/add')
             )
@@ -168,7 +168,7 @@ function ckeditor_profile_overview() {
 
   $rows = array();
   if (!isset($profiles['CKEditor Global Profile'])) {
-    drupal_set_message(t(
+    backdrop_set_message(t(
             'The global profile can not be found. Click here to !create.', array(
           '!create' => l(t('create the global profile'), 'admin/config/content/ckeditor/addg')
             )
@@ -205,8 +205,8 @@ function ckeditor_admin_global_profile_form($form, $form_state, $mode = 'add') {
   if ($mode == 'add') {
     $data = ckeditor_profile_load('CKEditor Global Profile');
     if (!empty($data)) {
-      drupal_set_message(t('The global profile already exists. Only one global profile is allowed.'), 'error');
-      drupal_not_found();
+      backdrop_set_message(t('The global profile already exists. Only one global profile is allowed.'), 'error');
+      backdrop_not_found();
     }
 
     $btn = t('Create a global profile');
@@ -221,9 +221,9 @@ function ckeditor_admin_global_profile_form($form, $form_state, $mode = 'add') {
     $formats[$format->format] = $format->name;
   }
 
-  $drupal_base_path = ckeditor_base_path('relative');
-  $drupal_library_path = ckeditor_library_path('relative');
-  $module_drupal_path = ckeditor_module_path('relative');
+  $backdrop_base_path = ckeditor_base_path('relative');
+  $backdrop_library_path = ckeditor_library_path('relative');
+  $module_backdrop_path = ckeditor_module_path('relative');
   $skin_options = ckeditor_load_skin_options();
 
   $form['appearance'] = array(
@@ -270,13 +270,13 @@ function ckeditor_admin_global_profile_form($form, $form_state, $mode = 'add') {
         )
     ) .
     '<br /><br /> ' .
-    t('Available placeholders:!b &ndash; path of the Drupal installation (!base) !m &ndash; path where the CKEditor module is stored (!module).!l &ndash; path to the libraries directory (!library).', array(
+    t('Available placeholders:!b &ndash; path of the Backdrop installation (!base) !m &ndash; path where the CKEditor module is stored (!module).!l &ndash; path to the libraries directory (!library).', array(
       '!b' => '<br /><code>%b</code>',
       '!m' => '<br /><code>%m</code>',
       '!l' => '<br /><code>%l</code>',
-      '!base' => '<code>' . $drupal_base_path . '</code>',
-      '!module' => '<code>' . $module_drupal_path . '</code>',
-      '!library' => '<code>' . $drupal_library_path . '</code>',
+      '!base' => '<code>' . $backdrop_base_path . '</code>',
+      '!module' => '<code>' . $module_backdrop_path . '</code>',
+      '!library' => '<code>' . $backdrop_library_path . '</code>',
         )
     ) .
     '<br /> ' .
@@ -317,13 +317,13 @@ function ckeditor_admin_global_profile_form($form, $form_state, $mode = 'add') {
     '#maxlength' => 128,
     '#description' => t('Path to the CKEditor plugins directory relative to the document root.') .
     '<br />' .
-    t('Available placeholders:!b &ndash; path of the Drupal installation (!base) !m &ndash; the base URL path where the CKEditor module is stored (!module).!l &ndash; the base URL path to the libraries directory (!library)', array(
+    t('Available placeholders:!b &ndash; path of the Backdrop installation (!base) !m &ndash; the base URL path where the CKEditor module is stored (!module).!l &ndash; the base URL path to the libraries directory (!library)', array(
       '!b' => '<br /><code>%b</code>',
       '!m' => '<br /><code>%m</code>',
       '!l' => '<br /><code>%l</code>',
-      '!base' => '<code>' . $drupal_base_path . '</code>',
-      '!module' => '<code>' . $module_drupal_path . '</code>',
-      '!library' => '<code>' . $drupal_library_path . '</code>',
+      '!base' => '<code>' . $backdrop_base_path . '</code>',
+      '!module' => '<code>' . $module_backdrop_path . '</code>',
+      '!library' => '<code>' . $backdrop_library_path . '</code>',
         )
     ) .
     '<br /> ' .
@@ -363,13 +363,13 @@ function ckeditor_admin_global_profile_form($form, $form_state, $mode = 'add') {
         )
     ) .
     '<br />' .
-    t('Available placeholders:!b &ndash; path of the Drupal installation (!base) !m &ndash; path where the CKEditor module is stored (!module).!l &ndash; path to the libraries directory (!library)', array(
+    t('Available placeholders:!b &ndash; path of the Backdrop installation (!base) !m &ndash; path where the CKEditor module is stored (!module).!l &ndash; path to the libraries directory (!library)', array(
       '!b' => '<br /><code>%b</code>',
       '!m' => '<br /><code>%m</code>',
       '!l' => '<br /><code>%l</code>',
-      '!base' => '<code>' . $drupal_base_path . '</code>',
-      '!module' => '<code>' . $module_drupal_path . '</code>',
-      '!library' => '<code>' . $drupal_library_path . '</code>'
+      '!base' => '<code>' . $backdrop_base_path . '</code>',
+      '!module' => '<code>' . $module_backdrop_path . '</code>',
+      '!library' => '<code>' . $backdrop_library_path . '</code>'
         )
     ) .
     '<br /> ' .
@@ -398,15 +398,15 @@ function ckeditor_admin_global_profile_form($form, $form_state, $mode = 'add') {
   );
 
   //@todo DOWNLOAD API
-  if (variable_get('file_default_scheme', '') == 'private') {
+  if (config_get('system.core','file_default_scheme') == 'private') {
     $form['ckeditor_advanced_settings']['ckeditor_allow_download_private_files'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable access to files located in the private folder'),
       '#default_value' => !empty($profile->settings['ckeditor_allow_download_private_files']),
       '#return_value' => 't',
       '#description' => t(
-          '<strong>Use this option with care.</strong> If checked, CKEditor will allow anyone knowing the URL to view a file located inside of the private path (!private_path), but only if there is no information about the file in the Drupal database. If the path below is specified, anyone will have access only to that location.', array(
-        '!private_path' => '<code>' . variable_get('file_private_path', '') . '</code>'
+          '<strong>Use this option with care.</strong> If checked, CKEditor will allow anyone knowing the URL to view a file located inside of the private path (!private_path), but only if there is no information about the file in the Backdrop database. If the path below is specified, anyone will have access only to that location.', array(
+        '!private_path' => '<code>' . config_get('system.core','file_private_path') . '</code>'
           )
       ),
       '#required' => FALSE
@@ -427,7 +427,7 @@ function ckeditor_admin_global_profile_form($form, $form_state, $mode = 'add') {
       ) .
       '<br />' .
       t('System path to the private folder is: !system_path.', array(
-        '!system_path' => '<code>' . realpath(variable_get('file_private_path', conf_path() . '/files')) . DIRECTORY_SEPARATOR . '</code>'
+        '!system_path' => '<code>' . realpath(config_get('system.core','file_private_path')) . DIRECTORY_SEPARATOR . '</code>'
           )
       )
     );
@@ -558,7 +558,7 @@ function ckeditor_admin_global_profile_form_submit($form, &$form_state) {
       ))
       ->execute();
 
-  drupal_set_message(t('The CKEditor global profile was saved.'));
+  backdrop_set_message(t('The CKEditor global profile was saved.'));
   $form_state['redirect'] = 'admin/config/content/ckeditor';
 }
 
@@ -583,17 +583,17 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
   $editor_path = ckeditor_path('relative');
   $editor_local_path = ckeditor_path('local');
   $editor_url_path = ckeditor_path('url');
-  $module_drupal_path = ckeditor_module_path('relative');
-  $module_drupal_url_path = ckeditor_module_path('url');
+  $module_backdrop_path = ckeditor_module_path('relative');
+  $module_backdrop_url_path = ckeditor_module_path('url');
 
-  drupal_add_js(array('ckeditor_version' => ckeditor_get_version()), 'setting');
+  backdrop_add_js(array('ckeditor_version' => ckeditor_get_version()), 'setting');
 
   $lang_options = ckeditor_load_lang_options();
 
   // Attach the administration CSS.
   $form['#attached'] = array(
     'css' => array(
-      drupal_get_path('module', 'ckeditor') . '/css/ckeditor.admin.css',
+      backdrop_get_path('module', 'ckeditor') . '/css/ckeditor.admin.css',
     ),
   );
 
@@ -635,7 +635,7 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
 
   $global_profile = ckeditor_profile_load('CKEditor Global Profile');
   $toolbar_wizard = !empty($global_profile->settings['toolbar_wizard']) ? $global_profile->settings['toolbar_wizard'] : 't';
-  drupal_add_js(array('ckeditor_toolbar_wizard' => $toolbar_wizard), 'setting');
+  backdrop_add_js(array('ckeditor_toolbar_wizard' => $toolbar_wizard), 'setting');
 
   $form['basic']['name'] = array(
     '#type' => 'textfield',
@@ -693,8 +693,8 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
     '#title' => t('Security filters'),
     '#description' => t(
       'Below is a list of security filters along with their status for each text format.<br /><br />The following statuses are available: !img_enabled - the filter is configured for a given text format and will be run on the content during the filtering process. !img_disabled - the filter is disabled for a given text format and will not be run on the content during the filtering process.<br /><br />In order to modify the security filters settings for each of the text formats, you need to visit the text format configuration sections as listed below: !elem_format_config', array(
-      '!img_enabled' => '</br><img src="' . $module_drupal_path . '/images/tick.png"/>',
-      '!img_disabled' => '</br><img src="' . $module_drupal_path . '/images/delete.png"/>',
+      '!img_enabled' => '</br><img src="' . $module_backdrop_path . '/images/tick.png"/>',
+      '!img_disabled' => '</br><img src="' . $module_backdrop_path . '/images/delete.png"/>',
       '!elem_format_config' => '<ul class="text-formats-config"></ul>'
         )
     ),
@@ -712,7 +712,7 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
       }
     }
   }
-  drupal_add_js(array('text_format_filters' => $input_format_filters, 'text_formats_config_links' => $input_format_config_links), 'setting');
+  backdrop_add_js(array('text_format_filters' => $input_format_filters, 'text_formats_config_links' => $input_format_config_links), 'setting');
 
   $security_filters = ckeditor_security_filters();
   _ckeditor_admin_profile_form_security_filters($form, $profile, $security_filters);
@@ -760,30 +760,30 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
         $ui_colors["color_bottom"] = t('Color module: bottom');
       }
     }
-    drupal_add_js(array('ckeditor_uicolor' => $color_palette), 'setting');
+    backdrop_add_js(array('ckeditor_uicolor' => $color_palette), 'setting');
   }
 
   if ($editor_path == '<URL>') {
-    drupal_add_js($editor_url_path . '/ckeditor.js', 'external');
+    backdrop_add_js($editor_url_path . '/ckeditor.js', 'external');
   }
   else {
-    drupal_add_js('window.CKEDITOR_BASEPATH = "' . $editor_path . '/"', array('type' => 'inline', 'weight' => -100));
-    drupal_add_js($editor_url_path . '/ckeditor.js', array('type' => 'file', 'preprocess' => FALSE));
+    backdrop_add_js('window.CKEDITOR_BASEPATH = "' . $editor_path . '/"', array('type' => 'inline', 'weight' => -100));
+    backdrop_add_js($editor_url_path . '/ckeditor.js', array('type' => 'file', 'preprocess' => FALSE));
   }
-  drupal_add_js($module_drupal_url_path . '/ckeditor.config.js', 'file');
-  drupal_add_js($module_drupal_url_path . '/includes/ckeditor.admin.js', 'file');
+  backdrop_add_js($module_backdrop_url_path . '/ckeditor.config.js', 'file');
+  backdrop_add_js($module_backdrop_url_path . '/includes/ckeditor.admin.js', 'file');
 
   if ($toolbar_wizard == 't') {
-    drupal_add_library('system', 'ui.widget');
-    drupal_add_library('system', 'ui.sortable');
-    drupal_add_js($module_drupal_url_path . '/includes/jqueryUI/sort.js', 'file');
+    backdrop_add_library('system', 'ui.widget');
+    backdrop_add_library('system', 'ui.sortable');
+    backdrop_add_js($module_backdrop_url_path . '/includes/jqueryUI/sort.js', 'file');
   }
 
   $form['appearance']['toolbar'] = array(
     '#type' => 'textarea',
     '#title' => t('Toolbar'),
     '#default_value' => !empty($profile->settings['toolbar']) ? $profile->settings['toolbar'] : '',
-    '#description' => t('Load sample toolbar: !toolbars', array("!toolbars" => '<a href="#" id="cke_toolbar_DrupalBasic" class="cke_load_toolbar">' . t('Basic') . '</a> | <a href="#" id="cke_toolbar_DrupalAdvanced" class="cke_load_toolbar">' . t('Advanced') . '</a> | <a href="#" id="cke_toolbar_DrupalFull" class="cke_load_toolbar">' . t('Full') . '</a>')),
+    '#description' => t('Load sample toolbar: !toolbars', array("!toolbars" => '<a href="#" id="cke_toolbar_BackdropBasic" class="cke_load_toolbar">' . t('Basic') . '</a> | <a href="#" id="cke_toolbar_BackdropAdvanced" class="cke_load_toolbar">' . t('Advanced') . '</a> | <a href="#" id="cke_toolbar_BackdropFull" class="cke_load_toolbar">' . t('Full') . '</a>')),
     '#wysiwyg' => FALSE,
     '#rows' => 15
   );
@@ -794,7 +794,7 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
       '#description' => t('Currently used buttons'),
     );
 
-    drupal_add_js(array('cke_toolbar_buttons_all' => ckeditor_toolbar_buttons_all()), 'setting');
+    backdrop_add_js(array('cke_toolbar_buttons_all' => ckeditor_toolbar_buttons_all()), 'setting');
 
     $form['appearance']['toolbar_wizzard_all'] = array(
       '#markup' => '<div>' . t('Available buttons') . '</div><div id="allButtons" class="sortableList"></div><br/>',
@@ -847,7 +847,7 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
   }
   $skinframe_url = url('admin/config/content/ckeditor/skinframe', array(
     'query' => array(
-      'token' => drupal_get_token('ckeditorSkinframeCall'),
+      'token' => backdrop_get_token('ckeditorSkinframeCall'),
       'skin' => $global_profile->settings['skin'],
       'uicolor' => (!empty($profile->settings['uicolor_user']) && $profile->settings['uicolor'] == 'custom') ? ltrim($profile->settings['uicolor_user'], '#') : 'D3D3D3'
     )
@@ -963,7 +963,7 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
     '!img' => '<code>&lt;img&gt;</code>',
     '!b' => '<code>&lt;b&gt;</code>'
   )).'<br /><br />'.
-    t('<strong>Warning:</strong> CKEditor will not use the set of tags associated with text format. Only the buttons enabled in the toolbar and optional plugins will determine which tags/attributes/styles are handled by CKEditor. Enabling ACF in CKEditor does not affect server-side filtering done by Drupal in any way.'),
+    t('<strong>Warning:</strong> CKEditor will not use the set of tags associated with text format. Only the buttons enabled in the toolbar and optional plugins will determine which tags/attributes/styles are handled by CKEditor. Enabling ACF in CKEditor does not affect server-side filtering done by Backdrop in any way.'),
 
     '#default_value' => !empty($profile->settings['allowed_content']) ? $profile->settings['allowed_content'] : 't',
     '#options' => array(
@@ -1078,8 +1078,8 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
     '#collapsed' => TRUE
   );
 
-  $current_theme = variable_get('theme_default', $theme);
-  $theme_path = drupal_get_path('theme', $current_theme);
+  $current_theme = config_get('system.core','theme_default');
+  $theme_path = backdrop_get_path('theme', $current_theme);
 
   $form['css']['css_mode'] = array(
     '#type' => 'select',
@@ -1135,7 +1135,7 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
     '#description' => t(
         'Define the location of the !ckeditor_styles_js_file file. It is used by the <strong>Style</strong> drop-down list available in the default toolbar. Copy the !ckeditor_styles_js_path file into your theme directory (!theme) and adjust it to your needs.', array(
       '!ckeditor_styles_js_file' => '<code>ckeditor.styles.js</code>',
-      '!ckeditor_styles_js_path' => '<code>' . drupal_get_path('module', 'ckeditor') . '/ckeditor.styles.js</code>',
+      '!ckeditor_styles_js_path' => '<code>' . backdrop_get_path('module', 'ckeditor') . '/ckeditor.styles.js</code>',
       '!theme' => '<code>' . $theme_path . '/ckeditor.styles.js' . '</code>'
         )
     )
@@ -1161,7 +1161,7 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
       '!m' => '<br /><code>%m</code>',
       '!host' => '<code>' . base_path() . '</code>',
       '!theme' => '<code>' . base_path() . $theme_path . '/</code>',
-      '!module' => '<code>' . drupal_get_path('module', 'ckeditor') . '</code>'
+      '!module' => '<code>' . backdrop_get_path('module', 'ckeditor') . '</code>'
         )
     )
   );
@@ -1172,7 +1172,7 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
     '#description' => t(
-        'Set the file browser settings. A file browser will allow you to browse the files stored on the server and embed them as links, images, or Flash movies. CKEditor is compatible with such Drupal modules as !imce or !elfinder. CKEditor can be also integrated with !ckfinder, an advanced Ajax file manager.', array(
+        'Set the file browser settings. A file browser will allow you to browse the files stored on the server and embed them as links, images, or Flash movies. CKEditor is compatible with such Backdrop modules as !imce or !elfinder. CKEditor can be also integrated with !ckfinder, an advanced Ajax file manager.', array(
       '!imce' => l(t('IMCE'), 'http://drupal.org/project/imce'),
       '!elfinder' => l(t('elFinder'), 'http://drupal.org/project/elfinder'),
       '!ckfinder' => l(t('CKFinder'), 'http://cksource.com/ckfinder')
@@ -1240,12 +1240,12 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
     '#description' => t('Select the file browser that you would like to use to upload Flash movies.'),
   );
 
-  if (variable_get('file_default_scheme', '') != 'private') {
+  if (config_get('system.core','file_default_scheme')!= 'private') {
     $current_user_files_path = empty($profile->settings['UserFilesPath']) ? "%b%f/" : $profile->settings['UserFilesPath'];
-    $current_user_files_path = strtr($current_user_files_path, array("%f" => variable_get('file_public_path', conf_path() . '/files'), "%u" => "UID", "%b" => base_path(), "%n" => "UNAME"));
+    $current_user_files_path = strtr($current_user_files_path, array("%f" => config_get('system.core','file_public_path'), "%u" => "UID", "%b" => base_path(), "%n" => "UNAME"));
 
     $current_user_files_absolute_path = empty($profile->settings['UserFilesAbsolutePath']) ? "%d%b%f/" : $profile->settings['UserFilesAbsolutePath'];
-    $current_user_files_absolute_path = strtr($current_user_files_absolute_path, array("%f" => variable_get('file_public_path', conf_path() . '/files'), "%u" => "UID", "%b" => base_path(), "%d" => ckeditor_get_document_root_full_path(), "%n" => "UNAME"));
+    $current_user_files_absolute_path = strtr($current_user_files_absolute_path, array("%f" => config_get('system.core','file_public_path'), "%u" => "UID", "%b" => base_path(), "%d" => ckeditor_get_document_root_full_path(), "%n" => "UNAME"));
 
 
     $form['ckeditor_upload_settings']['UserFilesPath'] = array(
@@ -1257,12 +1257,12 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
       '#maxlength' => 255,
       '#description' => t('Path to uploaded files relative to the document root.') .
       '<br />' .
-      t('Available placeholders:!b &ndash; the base URL path of the Drupal installation (!base).!f &ndash; the Drupal file system path where the files are stored (!files).!u &ndash; User ID.!n &ndash; Username.', array(
+      t('Available placeholders:!b &ndash; the base URL path of the Backdrop installation (!base).!f &ndash; the Backdrop file system path where the files are stored (!files).!u &ndash; User ID.!n &ndash; Username.', array(
         '!n' => '<br /><code>%n</code>',
         '!u' => '<br /><code>%u</code>',
         '!f' => '<br/><code>%f</code>',
         '!b' => '<br/><code>%b</code>',
-        '!files' => '<code>' . variable_get('file_public_path', conf_path() . '/files') . '</code>',
+        '!files' => '<code>' . config_get('system.core','file_public_path') . '</code>',
         '!base' => '<code>' . base_path() . '</code>'
           )
       ) .
@@ -1282,13 +1282,13 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
       '#suffix' => '</fieldset>',
       '#description' => t('The path to the local directory (on the server) which points to the path defined above. If left empty, CKEditor will try to discover the right path.') .
       '<br />' .
-      t('Available placeholders:!d &ndash; the server path to the document root (!root).!b &ndash; the base URL path of the Drupal installation (!base).!f &ndash; the Drupal file system path where the files are stored (!files).!u &ndash; User ID.!n &ndash; Username.', array(
+      t('Available placeholders:!d &ndash; the server path to the document root (!root).!b &ndash; the base URL path of the Backdrop installation (!base).!f &ndash; the Backdrop file system path where the files are stored (!files).!u &ndash; User ID.!n &ndash; Username.', array(
         '!u' => '<br /><code>%u</code>',
         '!n' => '<br /><code>%n</code>',
         '!d' => '<br/><code>%d</code>',
         '!b' => '<br /><code>%b</code>',
         '!f' => '<br/><code>%f</code>',
-        '!files' => '<code>' . variable_get('file_public_path', conf_path() . '/files') . '</code>',
+        '!files' => '<code>' . config_get('system.core','file_public_path') . '</code>',
         '!base' => '<code>' . base_path() . '</code>',
         '!root' => '<code>' . ckeditor_get_document_root_full_path() . '</code>'
           )
@@ -1300,7 +1300,7 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
       )
     );
   }
-  if (variable_get('file_default_scheme', '') == 'private') {
+  if (config_get('system.core','file_default_scheme') == 'private') {
     $form['ckeditor_upload_settings']['private_path_descrption'] = array(
       '#markup' => '<div>' . t(
           'Setting a relative path to uploaded files was disabled because private downloads are enabled and thus this path is calculated automatically. To change the location of uploaded files in the private file system, edit the <strong>!url</strong>.', array(
@@ -1394,7 +1394,7 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
     '#rows' => 5,
     '#description' => t(
         'In order to change CKEditor configuration globally, you should modify the !ckeditor_config configuration file. Sometimes it is required to change the CKEditor configuration for a single profile only. Use this box to define settings that are unique for this profile. Available options are listed in the !docs. Add the following code snippet to change the fonts available in the CKEditor <strong>Font</strong> and <strong>Size</strong> drop-down lists: <pre>@code</pre><strong>Warning</strong>: If you make a mistake here, CKEditor may not load correctly.', array(
-      '!ckeditor_config' => '<code>' . drupal_get_path('module', 'ckeditor') . "/ckeditor.config.js</code>",
+      '!ckeditor_config' => '<code>' . backdrop_get_path('module', 'ckeditor') . "/ckeditor.config.js</code>",
       '!docs' => l(t('CKEditor documentation'), 'http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html'),
       '@code' => "config.font_names = 'Arial;Times New Roman;Verdana';\nconfig.fontSize_sizes = '16/16px;24/24px;48/48px;';"
         )
@@ -1513,10 +1513,10 @@ function ckeditor_admin_profile_form_submit($form, &$form_state) {
 
   if (isset($edit['_profile'])) {
     ckeditor_profile_delete($edit['_profile']->name);
-    drupal_set_message(t('Your CKEditor profile was updated.'));
+    backdrop_set_message(t('Your CKEditor profile was updated.'));
   }
   else {
-    drupal_set_message(t('Your CKEditor profile was created.'));
+    backdrop_set_message(t('Your CKEditor profile was created.'));
   }
 
   $settings = ckeditor_admin_values_to_settings($edit);
@@ -1557,7 +1557,7 @@ function ckeditor_admin_profile_clone_form_validate($form_state, $oldprofile) {
  */
 function ckeditor_admin_profile_clone_form_submit($form, &$form_state) {
   $edit = & $form_state['values'];
-  drupal_set_message(t('Your CKEditor profile was created.'));
+  backdrop_set_message(t('Your CKEditor profile was created.'));
   $settings = ckeditor_admin_values_to_settings($edit);
   db_insert('ckeditor_settings')
       ->fields(array(
@@ -1620,7 +1620,7 @@ function ckeditor_admin_profile_delete_form_submit($form, &$form_state) {
 
   if ($form_state['clicked_button']['#id'] == 'delete') {
     ckeditor_profile_delete($v['_profile']->name);
-    drupal_set_message(t('The CKEditor profile was deleted.'));
+    backdrop_set_message(t('The CKEditor profile was deleted.'));
   }
 
   $form_state['redirect'] = 'admin/config/content/ckeditor';
@@ -1628,7 +1628,7 @@ function ckeditor_admin_profile_delete_form_submit($form, &$form_state) {
 
 /**
  * Converts an array of form values to a serialized array that does not
- * contain Drupal Form API values
+ * contain Backdrop Form API values
  */
 function ckeditor_admin_values_to_settings($values) {
   $plugins = array();
@@ -1692,13 +1692,13 @@ function _ckeditor_load_methods() {
  */
 
 function ckeditor_disable_wysiwyg($token) {
-  if (!drupal_valid_token($token, 'ckeditorDisableWysiwyg')) {
+  if (!backdrop_valid_token($token, 'ckeditorDisableWysiwyg')) {
     exit();
   }
   module_disable(array('wysiwyg'));
-  drupal_set_message(t('The WYSIWYG module is disabled.'));
+  backdrop_set_message(t('The WYSIWYG module is disabled.'));
 
-  drupal_goto('admin/config/content/ckeditor');
+  backdrop_goto('admin/config/content/ckeditor');
 }
 
 /*
@@ -1706,7 +1706,7 @@ function ckeditor_disable_wysiwyg($token) {
  */
 
 function ckeditor_toolbar_buttons_all() {
-  $path = base_path() . drupal_get_path('module', 'ckeditor');
+  $path = base_path() . backdrop_get_path('module', 'ckeditor');
 
   //CKEditor default buttons
   $buttons = array(
@@ -1841,14 +1841,14 @@ function _ckeditor_admin_profile_form_security_filters(&$form, $profile, $securi
 function ckeditor_skinframe() {
   header('Content-Type: text/html; charset=utf-8');
 
-  if (!isset($_GET['token']) || !drupal_valid_token($_GET['token'], 'ckeditorSkinframeCall')) {
+  if (!isset($_GET['token']) || !backdrop_valid_token($_GET['token'], 'ckeditorSkinframeCall')) {
     exit;
   }
 
   $editor_path = ckeditor_path('relative');
   if ($editor_path == '<URL>')
     $editor_path = ckeditor_path('url');
-  $module_drupal_path = ckeditor_module_path('relative');
+  $module_backdrop_path = ckeditor_module_path('relative');
 
   $html = "<!DOCTYPE html>";
   $html .= "<html>";
@@ -1899,7 +1899,7 @@ CKEDITOR.replace('editor', {
         }
       }
       else {
-        CKEDITOR.plugins.addExternal('uicolor', '{$module_drupal_path}/includes/uicolor/', 'plugin.js');
+        CKEDITOR.plugins.addExternal('uicolor', '{$module_backdrop_path}/includes/uicolor/', 'plugin.js');
         if (uicolor.length == 0 || uicolor == 'default') {
           delete ev.editor.config.uiColor;
         }

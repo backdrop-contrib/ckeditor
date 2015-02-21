@@ -4,7 +4,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
 /**
- * @file Plugin for inserting Drupal embeded media
+ * @file Plugin for inserting Backdrop embedded media
  */
 ( function() {
   var numberRegex = /^\d+(?:\.\d+)?$/;
@@ -21,7 +21,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
     {
       var addCssObj = CKEDITOR;
 
-      if (Drupal.ckeditor_ver == 3) {
+      if (Backdrop.ckeditor_ver == 3) {
         addCssObj = editor;
       }
       addCssObj.addCss(

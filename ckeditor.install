@@ -21,9 +21,9 @@
  * == END LICENSE ==
  *
  * @file
- * CKEditor Module for Drupal 7.x
+ * CKEditor Module for Backdrop 1.x
  *
- * This module allows Drupal to replace textarea fields with CKEditor.
+ * This module allows Backdrop to replace textarea fields with CKEditor.
  *
  * CKEditor is an online rich text editor that can be embedded inside web pages.
  * It is a WYSIWYG (What You See Is What You Get) editor which means that the
@@ -41,13 +41,12 @@
  *
  * If you are using another database, you will have to install the tables manually, using the queries below as a reference.
  *
- * Note that the curly braces around table names are a Drupal-specific feature to allow for automatic database table prefixing,
+ * Note that the curly braces around table names are a Backdrop-specific feature to allow for automatic database table prefixing,
  * and will need to be removed.
  */
 
 function ckeditor_install() {
   module_load_include('inc', 'ckeditor', 'includes/ckeditor.lib');
-
   //searching ckeditor.js
   $ckeditor_path = _ckeditor_script_path();
   //insert default input formats to profiles
@@ -66,8 +65,8 @@ function ckeditor_install() {
   //appearance
   $arr['default'] = "t";
   $arr['show_toggle'] = "t";
-  $arr['popup'] = variable_get('ckeditor_popup', 0) ? "t" : "f";
-  // <!--break--> does not work in Filtered HTML, so DrupalBreak does not make sense here
+  $arr['popup'] = config_get('ckeditor.settings','ckeditor_popup') ? "t" : "f";
+  // <!--break--> does not work in Filtered HTML, so BackdropBreak does not make sense here
   // https://drupal.org/node/881006
   $arr['toolbar'] = "
 [
@@ -84,8 +83,8 @@ function ckeditor_install() {
     ['Link','Unlink','Anchor','Linkit']
 ]
     ";
-  $arr['expand'] = variable_get('ckeditor_toolbar_start_expanded', 1) ? "t" : "f";
-  $arr['width'] = variable_get("ckeditor_width", "100%");
+  $arr['expand'] = config_get('ckeditor.settings','ckeditor_toolbar_start_expanded') ? "t" : "f";
+  $arr['width'] = config_get('ckeditor.settings','ckeditor_width');
   $arr['lang'] = "en";
   $arr['auto_lang'] = "t";
   $arr['language_direction'] = "default";
@@ -101,7 +100,7 @@ function ckeditor_install() {
 
   //css
   $arr['css_mode'] = "none";
-  $arr['css_path'] = variable_get("ckeditor_stylesheet", "");
+  $arr['css_path'] = config_get('ckeditor.settings','ckeditor_stylesheet');
 
   //upload
   //get permissions here like in _update_role_permissions
@@ -128,7 +127,7 @@ function ckeditor_install() {
     ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
     ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl','-','Language'],
     ['Link','Unlink','Anchor','Linkit'],
-    ['DrupalBreak'],
+    ['BackdropBreak'],
     '/',
     ['Format','Font','FontSize'],
     ['TextColor','BGColor'],
@@ -190,7 +189,7 @@ function ckeditor_schema() {
         'not null' => TRUE,
         'default' => '',
         'length' => 128,
-        'description' => 'Drupal filter format ID',
+        'description' => 'Backdrop filter format ID',
       )
     ),
     'primary key' => array('name', 'format'),
@@ -356,7 +355,7 @@ function _ckeditor_requirements_ckfinder_config_check($profile_name) {
   }
 
   if (!$require_once_found) {
-    return t('You are using a feature that requires manual integration in the <code>config.php</code> file. Please read the "Installing CKFinder" section in the <code>!readme</code> file carefully and add a <code>require_once ...</code> statement to the <code>%ckfconfig</code> file.', array('%ckfconfig' => $config_path, '!readme' => l(t('README.txt'), $base_url . '/' . drupal_get_path('module', 'ckeditor') . '/README.txt', array('absolute' => TRUE))));
+    return t('You are using a feature that requires manual integration in the <code>config.php</code> file. Please read the "Installing CKFinder" section in the <code>!readme</code> file carefully and add a <code>require_once ...</code> statement to the <code>%ckfconfig</code> file.', array('%ckfconfig' => $config_path, '!readme' => l(t('README.txt'), $base_url . '/' . backdrop_get_path('module', 'ckeditor') . '/README.txt', array('absolute' => TRUE))));
   }
 
   if ($userfiles_absolute_path_line && $force_single_extension_line && (
@@ -431,7 +430,7 @@ function ckeditor_update_7000() {
     ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
     ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl'],
     ['Link','Unlink','Anchor'],
-    ['DrupalBreak'],
+    ['BackdropBreak'],
     '/',
     ['Format','Font','FontSize'],
     ['TextColor','BGColor'],
@@ -450,7 +449,7 @@ function ckeditor_update_7000() {
 }
 
 /**
- * Removes the 'DrupalBreak' button from the 'Advanced' profile. (Resets toolbar to default)
+ * Removes the 'BackdropBreak' button from the 'Advanced' profile. (Resets toolbar to default)
  */
 function ckeditor_update_7001() {
   $result = db_query("SELECT settings FROM {ckeditor_settings} WHERE name = :name", array(':name' => 'Advanced'))->fetchField();
@@ -605,7 +604,7 @@ function _ckeditor_d6_to_d7_migration() {
           'not null' => TRUE,
           'default' => '',
           'length' => 128,
-          'description' => 'Drupal filter format ID',
+          'description' => 'Backdrop filter format ID',
         )
       ),
       'primary key' => array('name', 'format'),

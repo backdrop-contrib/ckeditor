@@ -4,12 +4,12 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
 /**
- * @file Plugin for inserting images from Drupal media module
+ * @file Plugin for inserting images from Backdrop media module
  */
 ( function() {
   CKEDITOR.plugins.add( 'media',
   {
-    // Wrap Drupal plugin in a proxy plugin.
+    // Wrap Backdrop plugin in a proxy plugin.
     init: function(editor)
     {
       var pluginCommand = {
@@ -34,7 +34,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
               data.content = data.node.parentNode.innerHTML;
             }
           }
-          Drupal.settings.ckeditor.plugins['media'].invoke(data, Drupal.settings.ckeditor.plugins['media'], editor.name);
+          Backdrop.settings.ckeditor.plugins['media'].invoke(data, Backdrop.settings.ckeditor.plugins['media'], editor.name);
         }
       };
       editor.addCommand( 'media', pluginCommand );

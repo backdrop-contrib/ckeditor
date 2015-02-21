@@ -47,7 +47,7 @@ function ckeditor_drush_download() {
     $path = $args[0];
   }
   else {
-    $path = drush_get_context('DRUSH_DRUPAL_ROOT') . '/sites/all/libraries/ckeditor';
+    $path = drush_get_context('DRUSH_BACKDROP_ROOT') . '/sites/all/libraries/ckeditor';
   }
   $svn_cmd = 'svn checkout http://svn.ckeditor.com/CKEditor/releases/stable/ ' . $path;
   if (drush_shell_exec($svn_cmd)) {

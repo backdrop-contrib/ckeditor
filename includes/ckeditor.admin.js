@@ -3,7 +3,7 @@ Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 (function ($) {
-  Drupal.ckeditor_ver = 4;
+  Backdrop.ckeditor_ver = 4;
 
   $(document).ready(function() {
     if (typeof(CKEDITOR) == "undefined")
@@ -11,11 +11,11 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
     // $('#edit-uicolor-textarea').show();
 
-    if (Drupal.settings.ckeditor_version) {
-      Drupal.ckeditor_ver = Drupal.settings.ckeditor_version.split('.')[0];
+    if (Backdrop.settings.ckeditor_version) {
+      Backdrop.ckeditor_ver = Backdrop.settings.ckeditor_version.split('.')[0];
     }
 
-    Drupal.editSkinEditorInit = function() {
+    Backdrop.editSkinEditorInit = function() {
       var skinframe_src = $('#skinframe').attr('src');
       //skinframe_src = skinframe_src.replace(/skin=[^&]+/, 'skin='+$("#edit-skin").val());
       var skin = skinframe_src.match(/skin=([^&]+)/)[1];
@@ -27,7 +27,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
       }
       $('#skinframe').attr('src', skinframe_src);
 
-      if (Drupal.ckeditor_ver == 3) {
+      if (Backdrop.ckeditor_ver == 3) {
         if (skin == "kama") {
           $("#edit-uicolor").removeAttr('disabled');
           $("#edit-uicolor").parent().removeClass('form-disabled');
@@ -43,10 +43,10 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
       }
     };
 
-    Drupal.editSkinEditorInit();
+    Backdrop.editSkinEditorInit();
 
     $("#edit-uicolor").bind("change", function() {
-      Drupal.editSkinEditorInit();
+      Backdrop.editSkinEditorInit();
     });
 
     $("#input-formats :checkbox").change(function() {
@@ -57,8 +57,8 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
         var format_name = $(this).val();
         var format_label = $('label[for="' + $(this).attr('id') + '"]').html();
 
-        if (typeof(Drupal.settings.text_formats_config_links[format_name]) != 'undefined') {
-          var text = "<li>" + format_label + " - <a href=\"" + Drupal.settings.text_formats_config_links[format_name].config_url + "\">configure</a></li>";
+        if (typeof(Backdrop.settings.text_formats_config_links[format_name]) != 'undefined') {
+          var text = "<li>" + format_label + " - <a href=\"" + Backdrop.settings.text_formats_config_links[format_name].config_url + "\">configure</a></li>";
           var dataSel = $('#security-filters ul.text-formats-config');
           var html = dataSel.html();
           if (html == null || html.length == 0) {
@@ -75,7 +75,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
           var dataSel = $(this);
           var html = dataSel.html();
           var status = "enabled";
-          if (typeof Drupal.settings.text_format_filters[format_name][filter_name] == 'undefined') {
+          if (typeof Backdrop.settings.text_format_filters[format_name][filter_name] == 'undefined') {
             status = "disabled";
           }
           var text = "<span class=\"filter-text-format-status " + status + "\">" + format_label + ': </span><br/>';
@@ -93,7 +93,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
     $("#input-formats :checkbox:eq(0)").trigger('change');
 
     $(".cke_load_toolbar").click(function() {
-      var buttons = eval('Drupal.settings.'+$(this).attr("id"));
+      var buttons = eval('Backdrop.settings.'+$(this).attr("id"));
       var text = "[\n";
       for(i in buttons) {
         if (typeof buttons[i] == 'string'){
@@ -121,13 +121,13 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
       text = text + "]";
       text = text.replace(/\['\/'\]/g,"'/'");
       $("#edit-toolbar").attr('value',text);
-      if (Drupal.settings.ckeditor_toolbar_wizard == 't'){
-        Drupal.ckeditorToolbarReload();
+      if (Backdrop.settings.ckeditor_toolbar_wizard == 't'){
+        Backdrop.ckeditorToolbarReload();
       }
       return false;
     });
 
-    if (Drupal.settings.ckeditor_toolbar_wizard == 'f'){
+    if (Backdrop.settings.ckeditor_toolbar_wizard == 'f'){
       $("form#ckeditor-admin-profile-form textarea#edit-toolbar, form#ckeditor-admin-profile-form #edit-toolbar + .grippie").show();
     }
   });
