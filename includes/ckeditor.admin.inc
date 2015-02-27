@@ -103,7 +103,6 @@ function ckeditor_profile_overview() {
     $header = array(t('Profile'), t('Input format'), t('Operations'));
     $plugins = ckeditor_load_plugins();
     $disabled_plugins = array();
-	$rows = array();
     foreach ($profiles as $p) {
       if ($p->name !== "CKEditor Global Profile") {
         if (isset($p->settings['loadPlugins']) && is_array($p->settings['loadPlugins']) && count($p->settings['loadPlugins']) > 0) {
@@ -120,7 +119,7 @@ function ckeditor_profile_overview() {
               $disabled_plugins[$p->name][] = $plugin_name;
               $changed = TRUE;
             }
-          }
+          }//endof foreach
           if ($changed === TRUE) {
             db_update('ckeditor_settings')
                 ->fields(array(
@@ -128,8 +127,8 @@ function ckeditor_profile_overview() {
                 ))
                 ->condition('name', $p->name, '=')
                 ->execute();
-          }
-        }
+          }//endof if
+        }//end of if (isset
         $rows[] = array(
           array('data' => $p->name, 'valign' => 'top'),
           array('data' => implode("<br />\n", $p->input_formats)),
@@ -154,7 +153,7 @@ function ckeditor_profile_overview() {
       }
       backdrop_set_message($msg, 'warning');
     }
-
+    
     $output .= '<h3>' . t('Profiles') . '</h3>';
     $output .= theme('table', array("header" => $header, "rows" => $rows));
     $output .= '<p>' . l(t('Create a new profile'), 'admin/config/content/ckeditor/add') . '</p>';
@@ -442,8 +441,8 @@ function ckeditor_admin_global_profile_form($form, $form_state, $mode = 'add') {
       '#default_value' => empty($profile->settings['linktoc']) ? 'p' : $profile->settings['linktoc'],
       '#description' => t(
           'With the !plink extension it is possible to use internal: links. By default the !link extension is linking to nodes using paths.', array(
-        '!plink' => l(t('Path Filter'), 'http://backdrop.org/project/pathfilter'),
-        '!link' => l(t('Link To Content'), 'http://backdrop.org/project/linktocontent')
+        '!plink' => l(t('Path Filter'), 'http://drupal.org/project/pathfilter'),
+        '!link' => l(t('Link To Content'), 'http://drupal.org/project/linktocontent')
           )
       )
     );
@@ -1174,8 +1173,8 @@ function ckeditor_admin_profile_form($form, $form_state, $task, $profile = NULL)
     '#collapsed' => TRUE,
     '#description' => t(
         'Set the file browser settings. A file browser will allow you to browse the files stored on the server and embed them as links, images, or Flash movies. CKEditor is compatible with such Backdrop modules as !imce or !elfinder. CKEditor can be also integrated with !ckfinder, an advanced Ajax file manager.', array(
-      '!imce' => l(t('IMCE'), 'http://backdrop.org/project/imce'),
-      '!elfinder' => l(t('elFinder'), 'http://backdrop.org/project/elfinder'),
+      '!imce' => l(t('IMCE'), 'http://drupal.org/project/imce'),
+      '!elfinder' => l(t('elFinder'), 'http://drupal.org/project/elfinder'),
       '!ckfinder' => l(t('CKFinder'), 'http://cksource.com/ckfinder')
         )
     )

@@ -1266,7 +1266,7 @@ function ckeditor_profile_settings_compile($global_profile, $profile) {
         }
 
         // Grab stylesheets from color module
-        $color_paths = theme_get_setting('color_' . $current_theme . '_stylesheets', array());
+        $color_paths = theme_get_setting('color_' . $current_theme . '_stylesheets');
         if (defined('LANGUAGE_RTL') && $language->direction == LANGUAGE_RTL) {
           if (!empty($color_paths[1])) {
             $css_files[] = $host . $color_paths[1] . $query_string;

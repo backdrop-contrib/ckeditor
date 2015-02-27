@@ -246,11 +246,8 @@ function ckeditor_get_version($main_version = FALSE) {
 function ckeditor_preprocess_page(&$variables) {
   // Add our CSS file that adds common needed classes, such as align-left,
   // align-right, underline, indent, etc.
-  $variables['page_bottom']['ckeditor']['#attached']['css'] = array(
-    backdrop_get_path('module', 'ckeditor') . '/css/ckeditor.css' => array(
-      'every_page' => TRUE,
-    ),
-  );
+  backdrop_add_css(backdrop_get_path('module', 'ckeditor' ). '/css/ckeditor.css', 
+  array('type' => 'file', 'scope' => 'footer'));
 }
 
 /**
@@ -742,8 +739,7 @@ function ckeditor_field_extra_fields() {
     'label' => t('Rich text editor settings'),
     'description' => t('Rich text editor settings'),
     'weight' => 10,
-  );
-  return $fields;
+  );  return $fields;
 }
 
 

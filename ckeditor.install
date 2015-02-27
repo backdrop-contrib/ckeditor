@@ -84,7 +84,7 @@ function ckeditor_install() {
 ]
     ";
   $arr['expand'] = config_get('ckeditor.settings','ckeditor_toolbar_start_expanded') ? "t" : "f";
-  $arr['width'] = config_get('ckeditor.settings',"ckeditor_width");
+  $arr['width'] = config_get('ckeditor.settings','ckeditor_width');
   $arr['lang'] = "en";
   $arr['auto_lang'] = "t";
   $arr['language_direction'] = "default";
@@ -100,7 +100,7 @@ function ckeditor_install() {
 
   //css
   $arr['css_mode'] = "none";
-  $arr['css_path'] = config_get('ckeditor.settings',"ckeditor_stylesheet");
+  $arr['css_path'] = config_get('ckeditor.settings','ckeditor_stylesheet');
 
   //upload
   //get permissions here like in _update_role_permissions
