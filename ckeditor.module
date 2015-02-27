@@ -739,7 +739,8 @@ function ckeditor_field_extra_fields() {
     'label' => t('Rich text editor settings'),
     'description' => t('Rich text editor settings'),
     'weight' => 10,
-  );  return $fields;
+  );
+  return $fields;
 }
 
 
