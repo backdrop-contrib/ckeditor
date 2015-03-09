@@ -254,7 +254,7 @@ function ckeditor_preprocess_page(&$variables) {
  * Implements hook_form_FORM_ID_alter() for user_profile_form().
  */
 function ckeditor_form_user_profile_form_alter(&$form, &$form_state) {
-  if ($form['#user_category'] == 'account') {
+    if ($form['#attributes']['class'][0] == 'user-profile-form') {
     ckeditor_user_customize($form, $form_state, 'user_profile_form');
   }
 }
