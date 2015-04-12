@@ -39,9 +39,9 @@ jQuery(document).ready(function() {
         jQuery("#edit-toolbar").attr('value', tools);
     }
 
-    Drupal.ckeditorToolbaInit = function() {
-        Drupal.ckeditorToolbarUsedRender();
-        Drupal.ckeditorToolbarAllRender();
+    Backdrop.ckeditorToolbaInit = function() {
+        Backdrop.ckeditorToolbarUsedRender();
+        Backdrop.ckeditorToolbarAllRender();
 
         var firefox = navigator.userAgent.toLowerCase().match(/firefox\/[0-9]\./);
         jQuery(".sortableList").sortable({
@@ -78,14 +78,14 @@ jQuery(document).ready(function() {
         });
     }
 
-    Drupal.ckeditorToolbarReload = function() {
+    Backdrop.ckeditorToolbarReload = function() {
         jQuery(".sortableList").sortable('destroy');
         jQuery(".sortableRow").sortable('destroy');
         jQuery("li.sortableItem").unbind();
-        Drupal.ckeditorToolbaInit();
+        Backdrop.ckeditorToolbaInit();
     }
 
-    Drupal.ckeditorToolbarUsedRender = function() {
+    Backdrop.ckeditorToolbarUsedRender = function() {
         var toolbar = jQuery('#edit-toolbar').val();
         toolbar = eval(toolbar);
         var html = '<div class="sortableListDiv"><span class="sortableListSpan"><ul class="sortableRow">';
@@ -101,14 +101,14 @@ jQuery(document).ready(function() {
                     group = true;
                 }
                 else {
-                    html += '<li class="sortableItem group"><img src="' + Drupal.settings.cke_toolbar_buttons_all['__group']['icon'] + '" alt="group" title="group" /></li>';
+                    html += '<li class="sortableItem group"><img src="' + Backdrop.settings.cke_toolbar_buttons_all['__group']['icon'] + '" alt="group" title="group" /></li>';
                 }
                 for (var button in toolbar[row]) {
                     if (toolbar[row][button] == '-') {
-                        html += '<li class="sortableItem spacer"><img src="' + Drupal.settings.cke_toolbar_buttons_all['__spacer']['icon'] + '" alt="spacer" title="spacer" /></li>';
+                        html += '<li class="sortableItem spacer"><img src="' + Backdrop.settings.cke_toolbar_buttons_all['__spacer']['icon'] + '" alt="spacer" title="spacer" /></li>';
                     }
-                    else if (Drupal.settings.cke_toolbar_buttons_all[toolbar[row][button]]) {
-                        html += '<li class="sortableItem" id="' + Drupal.settings.cke_toolbar_buttons_all[toolbar[row][button]]['name'] + '"><img src="' + Drupal.settings.cke_toolbar_buttons_all[toolbar[row][button]]['icon'] + '" alt="' + Drupal.settings.cke_toolbar_buttons_all[toolbar[row][button]]['title'] + '" title="' + Drupal.settings.cke_toolbar_buttons_all[toolbar[row][button]]['title'] + '" /></li>';
+                    else if (Backdrop.settings.cke_toolbar_buttons_all[toolbar[row][button]]) {
+                        html += '<li class="sortableItem" id="' + Backdrop.settings.cke_toolbar_buttons_all[toolbar[row][button]]['name'] + '"><img src="' + Backdrop.settings.cke_toolbar_buttons_all[toolbar[row][button]]['icon'] + '" alt="' + Backdrop.settings.cke_toolbar_buttons_all[toolbar[row][button]]['title'] + '" title="' + Backdrop.settings.cke_toolbar_buttons_all[toolbar[row][button]]['title'] + '" /></li>';
                     }
                 }
             }
@@ -117,9 +117,9 @@ jQuery(document).ready(function() {
         jQuery('#groupLayout').empty().append(html);
     }
 
-    Drupal.ckeditorToolbarAllRender = function() {
+    Backdrop.ckeditorToolbarAllRender = function() {
         var toolbarUsed = jQuery('#edit-toolbar').val();
-        var toolbarAll = Drupal.settings.cke_toolbar_buttons_all;
+        var toolbarAll = Backdrop.settings.cke_toolbar_buttons_all;
 
         var htmlArray = new Array();
         var html = '';
@@ -146,5 +146,5 @@ jQuery(document).ready(function() {
         jQuery('#allButtons').empty().append(html);
     }
 
-    Drupal.ckeditorToolbaInit();
+    Backdrop.ckeditorToolbaInit();
 });
