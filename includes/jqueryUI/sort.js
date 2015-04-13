@@ -20,7 +20,7 @@ jQuery(document).ready(function() {
                     tools = tools + "],\n    [";
                 }
                 else {
-                    tools = tools + ",'" + jQuery(buttonValue).attr('id') + "'" ;
+                    tools = tools + ",'" + jQuery(buttonValue).prop('id') + "'" ;
                 }
             });
 
@@ -36,7 +36,7 @@ jQuery(document).ready(function() {
         tools = tools + "]";
         tools = tools.replace(/\[,/g, '[');
         tools = tools.replace(/\[],/g, '');
-        jQuery("#edit-toolbar").attr('value', tools);
+        jQuery("#edit-toolbar").prop('value', tools);
     }
 
     Backdrop.ckeditorToolbaInit = function() {
