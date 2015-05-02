@@ -2,5 +2,6 @@ name        = CKEditor
 description = "Enables CKEditor (WYSIWYG HTML editor) for use instead of plain text fields."
 backdrop    = 1.x
 version     = 1.x-1.16
+type        = module
 package     = User interface
 configure   = admin/config/content/ckeditor
