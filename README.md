@@ -2,7 +2,9 @@
 -------------------------
 
 This module is a port to Backdrop of the Drupal contributed module 'CKEditor - WYSIWYG HTML editor'. 
-It allows Backdrop to replace textarea fields with CKEditor.
+It allows Backdrop to replace textarea fields with CKEditor. This module provides a link between 
+Backdrop and the CKEditor library which may either be downloaded from http://ckeditor.com/download
+or may be linked from CDN - //cdn.ckeditor.com/4.4.3/full-all.
 
 CKEditor is an online rich text editor that can be embedded inside web pages.
 It is a WYSIWYG (What You See Is What You Get) editor which means that the
@@ -13,7 +15,19 @@ OpenOffice.org Writer. CKEditor is truly lightweight and does not require any
 kind of installation on the client computer.
 
 <h2>Status</h2>
-This module is in the initial stages of porting to Backdrop
+This is the first official release of this port to Backdrop. In a future release
+of Backdrop it is expected that CKEditor will be incorporated in Core and this 
+contributed module will no longer be needed.
+
+<h2>Installation</h2>
+Download and install this contributed module in the usual way. It will appear
+in the list of modules under the category User Interface.
+There are various configuration settings. As a default it links to the CDN
+at //cdn.ckeditor.com/4.4.3/full-all and so it is not necessary to install
+the CKEditor library.
+
+There are also a number of optional plugins.
+
 
 <h2>Help & Documentation</h2>
 
