@@ -1,5 +1,10 @@
-<h1>About CKEditor for BackdropCMS</h1>
--------------------------
+CKEditor
+=========
+
+**Important note**: CKEditor module was moved into Backdrop core in version 
+1.2.0. Use of this module is no longer necessary and no further changes will be 
+made here. If you would like to report a bug or feature request against CKEditor 
+module, file an issue in the main Backdrop CMS core repository at https://github.com/backdrop/backdrop-issues.
 
 This module is a port to Backdrop of the Drupal contributed module 'CKEditor - WYSIWYG HTML editor'. 
 It allows Backdrop to replace textarea fields with CKEditor. This module provides a link between 
@@ -14,12 +19,16 @@ features found in desktop word processors such as Microsoft Word and
 OpenOffice.org Writer. CKEditor is truly lightweight and does not require any
 kind of installation on the client computer.
 
-<h2>Status</h2>
+Status
+------------
+
 This is the first official release of this port to Backdrop. In a future release
 of Backdrop it is expected that CKEditor will be incorporated in Core and this 
 contributed module will no longer be needed.
 
-<h2>Installation</h2>
+Installation
+------------
+
 Download and install this contributed module in the usual way. It will appear
 in the list of modules under the category User Interface.
 There are various configuration settings. As a default it links to the CDN
@@ -29,7 +38,8 @@ the CKEditor library.
 There are also a number of optional plugins.
 
 
-<h2>Help & Documentation</h2>
+Help & Documentation
+--------------------
 
 If you are looking for more information, have any trouble with the configuration of the module
 or found an issue, please visit the official project page:
@@ -38,31 +48,35 @@ or found an issue, please visit the official project page:
 Extensive CKEditor for Drupal documentation is available at:
   http://docs.cksource.com/CKEditor_for_Drupal/Open_Source/Drupal_7
 
+    
+    
+Current Maintainers
+-------------------
+
+- none
 
 
-<h2>Module Information and License</h2>
+Credits
+-------
 
-CKEditor - The text editor for the Internet
-Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
-http://cksource.com/
+Ported to Backdrop by [Graham Oliver](https://github.com/Graham-72)
 
-Licensed under the terms of the GNU Lesser General Public License:
-    http://www.opensource.org/licenses/lgpl-license.php
+This module was originally written and maintained for Drupal by:
+
+- Hai-Nam Nguyen - jcisio; 
+- Wiktor Walc - wwalc;
+- mkesicki;
+- dczepierga; 
+- Jorrit Schippers - Jorrit
+
+
+License
+-------
+
+* This project is GPL v2 software. See the LICENSE.txt file in this directory for
+complete text.
+* CKEditor is licensed under the terms of the 
+  [GNU Lesser General Public License](http://www.opensource.org/licenses/lgpl-license.php).
 
 For further information visit:
     http://ckeditor.com/
-    
-    
-<h2>Current Maintainers</h2>
-
-<h3>For Drupal:</h3>
-
-Hai-Nam Nguyen - jcisio; 
-Wiktor Walc - wwalc;
-mkesicki;
-dczepierga; 
-Jorrit Schippers - Jorrit
-
-
-<h3>Port to Backdrop:</h3>
-Graham Oliver github.com/Graham-72
